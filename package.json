@@ -1,0 +1,12 @@
+{
+  "name": "eslint-formatter-html",
+  "version": "1.0.0",
+  "description": "eslint-formatter-html",
+  "main": "index.js",
+  "repository": {
+    "url": "https://github.com/shuoshubao/parce.git",
+    "type": "git"
+  },
+  "author": "shuoshubao <759979885@qq.com>",
+  "license": "MIT"
+}
