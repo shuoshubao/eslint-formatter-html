@@ -10,6 +10,12 @@
   "author": "shuoshubao <759979885@qq.com>",
   "license": "MIT",
   "scripts": {
-    "sass": "sass docs/index.scss docs/index.css --no-source-map"
+    "less": "npx lessc docs/index.less docs/index.css"
+  },
+  "dependencies": {
+    "js-ejs": "^0.0.7"
+  },
+  "devDependencies": {
+    "less": "^3.9.0"
   }
 }
