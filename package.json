@@ -8,5 +8,8 @@
     "type": "git"
   },
   "author": "shuoshubao <759979885@qq.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "scripts": {
+    "sass": "sass docs/index.scss docs/index.css --no-source-map"
+  }
 }
