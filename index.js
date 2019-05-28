@@ -5,7 +5,8 @@ module.exports = function(results, data) {
     const { rulesMeta = {} } = data;
 
     results.forEach(v => {
-        v.fileRelativePath = relative(root, v.filePath);
+        v.filePath = relative(root, v.filePath);
+        delete v.source;
     });
 
     return 'hello';

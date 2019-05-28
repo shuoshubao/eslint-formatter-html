@@ -4,7 +4,7 @@
   "description": "eslint-formatter-html",
   "main": "index.js",
   "repository": {
-    "url": "https://github.com/shuoshubao/parce.git",
+    "url": "https://github.com/shuoshubao/eslint-formatter-html.git",
     "type": "git"
   },
   "author": "shuoshubao <759979885@qq.com>",
