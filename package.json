@@ -10,7 +10,7 @@
   "author": "shuoshubao <759979885@qq.com>",
   "license": "MIT",
   "scripts": {
-    "less": "npx lessc docs/index.less docs/index.css"
+    "skeleton": "node bin/skeleton"
   },
   "dependencies": {
     "js-ejs": "^0.0.7"

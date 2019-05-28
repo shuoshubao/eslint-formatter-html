@@ -1,0 +1,73 @@
+html,
+body {
+  margin: 0;
+}
+#vue-app-root {
+  padding: 10px;
+}
+.eslint-results {
+  margin-top: 10px;
+}
+.box-card {
+  border: 0;
+  border-radius: 0;
+}
+.box-card .el-card__header {
+  padding: 5px 3px;
+  cursor: pointer;
+}
+.box-card .el-card__header .filePath {
+  cursor: default;
+  padding: 0 20px 0 40px;
+}
+.box-card .el-card__header .error-warning-count {
+  float: right;
+}
+.box-card .el-card__header .el-icon-check,
+.box-card .el-card__header .el-icon-arrow-right,
+.box-card .el-card__header .el-icon-arrow-down {
+  display: none;
+}
+.box-card.is-success .el-icon-check {
+  display: inline;
+}
+.box-card:not(.is-success).open .el-icon-arrow-down {
+  display: inline;
+}
+.box-card:not(.is-success).close .el-icon-arrow-right {
+  display: inline;
+}
+.box-card.is-success .el-card__header {
+  color: #67c23a;
+  background: #f0f9eb;
+  border-color: #c2e7b0;
+}
+.box-card.is-warning .el-card__header {
+  color: #e6a23c;
+  background: #fdf6ec;
+  border-color: #f5dab1;
+}
+.box-card.is-error .el-card__header {
+  background-color: #fef0f0;
+  color: #f56c6c;
+  border-color: #fbc4c4;
+}
+.box-card.close .el-card__body {
+  display: none;
+}
+.box-card .el-table td {
+  padding: 0;
+}
+.box-card .el-table .cell {
+  padding: 0 3px;
+  line-height: 20px;
+}
+.color-success {
+  color: #67c23a;
+}
+.color-danger {
+  color: #f56c6c;
+}
+.color-warning {
+  color: #e6a23c;
+}

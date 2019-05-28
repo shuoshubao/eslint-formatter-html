@@ -1,15 +1,16 @@
 const { relative, resolve } = require('path');
-const parseEslint = require('./lib/parse');
-const root = process.cwd();
+const parseEslint = require('./src/parser');
+
+const rootPath = process.cwd();
 
 const formatEslintResults = (results = [], rulesMetaUrlMap) => {
     results.forEach(v => {
         const { filePath, messages } = v;
-        v.filePath = relative(root, filePath);
+        v.filePath = relative(rootPath, filePath);
         v.messages = messages.map(v2 => {
             return {
                 ...v2,
-                ruleIdUrl: rulesMetaUrlMap[ruleId]
+                ruleIdUrl: rulesMetaUrlMap[v2.ruleId]
             };
         });
         delete v.source;
