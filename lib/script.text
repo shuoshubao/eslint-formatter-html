@@ -67,10 +67,8 @@ new Vue({
             return v.errorCount + v.warningCount === 0;
         }).length;
 
-        const errorWarningCount = errorCount + errorCount;
-
         Object.assign(this.analysis, {
-            errorWarningCount,
+            errorWarningCount: errorCount + warningCount,
             errorCount,
             warningCount,
             fixableCount,

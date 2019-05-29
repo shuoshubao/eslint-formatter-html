@@ -201,6 +201,10 @@ less@^3.9.0:
     request "^2.83.0"
     source-map "~0.6.0"
 
+lodash@^4.17.11:
+  version "4.17.11"
+  resolved "https://registry.npm.taobao.org/lodash/download/lodash-4.17.11.tgz#b39ea6229ef607ecd89e2c8df12536891cac9b8d"
+
 mime-db@1.40.0:
   version "1.40.0"
   resolved "https://registry.npm.taobao.org/mime-db/download/mime-db-1.40.0.tgz#a65057e998db090f732a68f6c276d387d4126c32"
