@@ -17,13 +17,14 @@ const styleText = getSectionText('style');
 module.exports = (results = []) => {
     const docText = getDocText(documentConfig => {
         documentConfig.title = 'ESLint Report';
-        documentConfig.bodyHtml = [templateText];
+        documentConfig.link['shortcut icon'] = 'https://eslint.org/img/favicon.512x512.png';
         documentConfig.style = [
             'https://unpkg.com/element-ui@2.8.2/lib/theme-chalk/index.css',
             {
                 __text: styleText
             }
         ];
+        documentConfig.bodyHtml = [templateText];
         documentConfig.script = [
             // 'https://unpkg.com/vue@2.6.10/dist/vue.js',
             'https://unpkg.com/vue@2.6.10/dist/vue.min.js',
