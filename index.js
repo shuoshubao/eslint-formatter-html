@@ -8,6 +8,7 @@ const formatEslintResults = (results = [], rulesMetaUrlMap) => {
         const { filePath, messages } = v;
         v.filePath = relative(rootPath, filePath);
         v.messages = messages.map(v2 => {
+            delete v2.fix;
             return {
                 ...v2,
                 ruleIdUrl: rulesMetaUrlMap[v2.ruleId]

@@ -31,9 +31,7 @@ module.exports = (results = []) => {
             'https://unpkg.com/element-ui@2.8.2/lib/index.js',
             'https://unpkg.com/lodash@4.17.11/lodash.js',
             {
-                __text: `
-                    window.results = ${JSON.stringify(results)}
-                `
+                __text: `window.results = ${JSON.stringify(results)};`
             },
             {
                 __text: scriptText
