@@ -1,6 +1,6 @@
 {
   "name": "eslint-formatter-html",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "eslint-formatter-html",
   "main": "index.js",
   "repository": {

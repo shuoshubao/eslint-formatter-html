@@ -15,9 +15,9 @@ npx eslint **/src/**/*.{js,vue} --ignore-path .gitignore -f html -o ESLintReport
 > 根据[官方文档](https://eslint.org/docs/user-guide/command-line-interface) 定义
 >
 > *An npm-installed formatter is resolved with or without eslint-formatter- prefix.*
-> 
+>
 > Eslint直接加参数 `-f html` 即可覆盖 Eslint 内置的 html 模板
-> 
+>
 > 或者 `-f eslint-formatter-html`
 
 
