@@ -1,5 +1,5 @@
 const { relative, resolve } = require('path');
-const parseEslint = require('./src/parser');
+const getDocText = require('js-ejs');
 
 const rootPath = process.cwd();
 
@@ -32,5 +32,12 @@ module.exports = function(results, data) {
 
     formatEslintResults(results, rulesMetaUrlMap);
 
-    return parseEslint(results);
+    return getDocText(documentConfig => {
+        documentConfig.script = [
+            {
+                __text: `window.EslintResults = ${JSON.stringify(results)};`
+            },
+            'https://raw.githubusercontent.com/shuoshubao/eslint-formatter-html/master/render.js'
+        ];
+    });
 };

@@ -107,7 +107,7 @@ new Vue({
             { label: 'WarningCount', prop: 'warningCount' },
             { label: '文件数', prop: 'fileCount' }
         ],
-        tableData: window.results.map(v => {
+        tableData: window.EslintResults.map(v => {
             return {
                 ...v,
                 open: true
