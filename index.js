@@ -26,6 +26,18 @@ const getRulesMetaUrlMap = (rulesMeta = {}) => {
     }, {});
 };
 
+const scriptText = results => {
+    return `
+    window.EslintResults = ${JSON.stringify(results)};
+
+
+    ;;(async () => {
+        const replJavasScript = (url = '') => fetch(url).then(res => res.text()).then(res => eval(res));
+        replJavasScript('https://raw.githubusercontent.com/shuoshubao/eslint-formatter-html/master/render.js');
+    })();;
+`;
+};
+
 module.exports = function(results, data) {
     const { rulesMeta = {} } = data;
     const rulesMetaUrlMap = getRulesMetaUrlMap(rulesMeta);
@@ -35,9 +47,8 @@ module.exports = function(results, data) {
     return getDocText(documentConfig => {
         documentConfig.script = [
             {
-                __text: `window.EslintResults = ${JSON.stringify(results)};`
-            },
-            'https://raw.githubusercontent.com/shuoshubao/eslint-formatter-html/master/render.js'
+                __text: scriptText(results)
+            }
         ];
     });
 };
