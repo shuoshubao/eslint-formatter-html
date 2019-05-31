@@ -6,12 +6,14 @@ const rootPath = process.cwd();
 /**
  * filePath => 相对路径
  * source => 删掉
+ * output => 删掉
  */
 const formatEslintResults = (results = []) => {
     results.forEach(v => {
         const { filePath } = v;
         v.filePath = relative(rootPath, filePath);
         delete v.source;
+        delete v.output;
     });
 };
 

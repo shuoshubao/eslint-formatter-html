@@ -32,6 +32,7 @@ npx eslint **/src/**/*.{js,vue} --ignore-path .gitignore -f html -o ESLintReport
 
 ## 开发者须知
 
+* [参考文档](https://eslint.org/docs/developer-guide/working-with-custom-formatters)
 * * 将 `src/index.vue` 拆解为 `lib/{template.html,script.js,style.css}`
 * 因此 `lib` 目录请不要手动去修改
 
