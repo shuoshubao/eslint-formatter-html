@@ -32,9 +32,9 @@
         });
     };
 
-    const styleText = await fetchFile('lib/style.text');
-    const templateText = await fetchFile('lib/template.text');
-    const scriptText = await fetchFile('lib/script.text');
+    const templateText = await fetchFile('lib/template.html');
+    const scriptText = await fetchFile('lib/script.js');
+    const styleText = await fetchFile('lib/style.css');
 
     appendElement({
         targetNode: nodeHead,
@@ -73,6 +73,11 @@
         targetNode: nodeBody,
         tagName: 'script',
         src: 'https://unpkg.com/element-ui@2.8.2/lib/index.js'
+    });
+    await appendElement({
+        targetNode: nodeBody,
+        tagName: 'script',
+        src: 'https://unpkg.com/lodash@4.17.11/lodash.js'
     });
     await appendElement({
         targetNode: nodeBody,

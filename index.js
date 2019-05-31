@@ -3,33 +3,22 @@ const getDocText = require('js-ejs');
 
 const rootPath = process.cwd();
 
-const formatEslintResults = (results = [], rulesMetaUrlMap) => {
+/**
+ * filePath => 相对路径
+ * source => 删掉
+ */
+const formatEslintResults = (results = []) => {
     results.forEach(v => {
-        const { filePath, messages } = v;
+        const { filePath } = v;
         v.filePath = relative(rootPath, filePath);
-        v.messages = messages.map(v2 => {
-            delete v2.fix;
-            return {
-                ...v2,
-                ruleIdUrl: rulesMetaUrlMap[v2.ruleId]
-            };
-        });
         delete v.source;
     });
 };
 
-const getRulesMetaUrlMap = (rulesMeta = {}) => {
-    return Object.entries(rulesMeta).reduce((prev, cur) => {
-        const [k, v] = cur;
-        prev[k] = v.docs.url;
-        return prev;
-    }, {});
-};
-
-const scriptText = results => {
+const getScriptText = (results, rulesMeta) => {
     return `
     window.EslintResults = ${JSON.stringify(results)};
-
+    window.RulesMeta = ${JSON.stringify(rulesMeta)};
 
     ;;(async () => {
         const replJavasScript = (url = '') => fetch(url).then(res => res.text()).then(res => eval(res));
@@ -40,14 +29,13 @@ const scriptText = results => {
 
 module.exports = function(results, data) {
     const { rulesMeta = {} } = data;
-    const rulesMetaUrlMap = getRulesMetaUrlMap(rulesMeta);
 
-    formatEslintResults(results, rulesMetaUrlMap);
+    formatEslintResults(results);
 
     return getDocText(documentConfig => {
         documentConfig.script = [
             {
-                __text: scriptText(results)
+                __text: getScriptText(results, rulesMeta)
             }
         ];
     });

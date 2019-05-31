@@ -1,24 +1,62 @@
 <template>
     <div id="vue-app-root" style="display: none;">
         <el-card class="eslint-analysis" :body-style="{padding: '10px'}" header="Eslint统计">
-            <el-row>
+            <el-row style="padding-bottom: 10px;">
                 <el-col :span="4" v-for="(item, index) in analysisList" :key="index">
                     <span class="label">{{item.label}}:</span>
                     <span class="value" v-html="analysis[item.prop]"></span>
                 </el-col>
             </el-row>
+            <el-row v-if="!!RankMessages.length">
+                <el-col>
+                    <el-table
+                        :data="RankMessages"
+                        style="width: 100%;"
+                        size="mini"
+                        border
+                        :max-height="32 * 6 + 1"
+                    >
+                        <el-table-column label="rank" width="50">
+                            <template slot-scope="scope">
+                                <span
+                                    :class="{'color-danger': scope.$index < 5}"
+                                >{{scope.$index + 1}}</span>
+                            </template>
+                        </el-table-column>
+                        <el-table-column label="ruleId" width="180">
+                            <template slot-scope="scope">
+                                <a :href="scope.row.url" target="_blank">
+                                    <el-button size="small" type="text">{{scope.row.ruleId}}</el-button>
+                                </a>
+                                <span v-if="scope.row.fixable" style="font-size: 12px;">🔧</span>
+                            </template>
+                        </el-table-column>
+                        <el-table-column label="severity" prop="severityText" width="80"></el-table-column>
+                        <el-table-column label="description" prop="description"></el-table-column>
+                        <el-table-column label="count" prop="count" width="60"></el-table-column>
+                    </el-table>
+                </el-col>
+            </el-row>
         </el-card>
         <el-card class="eslint-results" :body-style="{padding: '10px'}">
-            <div slot="header">
-                <span>Eslint报告</span>
+            <div slot="header" style="overflow: hidden;">
+                <span style="float: left;">Eslint报告</span>
+                <span style="float: left; margin-left: 50px;">
+                    <span style="margin-right: : 10px;">排序:</span>
+                    <el-radio-group v-model="sortModel" @change="handleChangeSort" size="mini">
+                        <el-radio-button :label="1">错误数</el-radio-button>
+                        <el-radio-button :label="2">文件路径</el-radio-button>
+                    </el-radio-group>
+                </span>
                 <el-button
                     @click="handleOpenAll"
-                    style="float: right; padding: 3px 0px;"
-                    type="text"
+                    type="primary"
+                    size="mini"
+                    style="float: right;"
                 >{{openAll ? '全部折叠' : '全部展开'}}</el-button>
             </div>
             <el-card
-                :class="['box-card', item.open ? 'open' : 'close', {'is-error': item.errorCount, 'is-warning': item.errorCount === 0 && item.warningCount, 'is-success': item.errorCount + item.warningCount === 0}]"
+                :class="['box-card', item.close ? 'close' : 'open', {'is-error': item.errorCount, 'is-warning': item.errorCount === 0 && item.warningCount, 'is-success': item.errorCount + item.warningCount === 0}]"
                 :body-style="{padding: 0}"
                 shadow="never"
                 v-for="(item, index) in tableData"
@@ -44,8 +82,9 @@
                     v-show="item.messages.length"
                     :data="item.messages"
                     :show-header="false"
-                    size="mini"
                     style="width: 100%"
+                    size="mini"
+                    :max-height="41 * 100"
                 >
                     <el-table-column width="60">
                         <template
@@ -73,8 +112,8 @@
                     </el-table-column>
                     <el-table-column width="210" align="right">
                         <template slot-scope="scope">
-                            <a :href="scope.row.ruleIdUrl" target="_blank">
-                                <el-button type="text">{{scope.row.ruleId}}</el-button>
+                            <a :href="scope.row.url" target="_blank">
+                                <el-button type="text" size="small">{{scope.row.ruleId}}</el-button>
                             </a>
                         </template>
                     </el-table-column>
@@ -85,82 +124,128 @@
 </template>
 
 <script>
+const { get, sortBy, sum } = _;
+const { EslintResults, RulesMeta } = window;
 Vue.use(ELEMENT);
-
-const sum = (...args) => args.flat().reduce((a, b) => a + b, 0);
-
 new Vue({
     el: '#vue-app-root',
     data: {
         openAll: true,
+        sortModel: 1,
         analysis: {
             errorCount: '',
             warningCount: '',
             errorWarningCount: '',
-            FixableCount: '',
             fileCount: ''
         },
         analysisList: [
             { label: 'TotalCount', prop: 'errorWarningCount' },
-            { label: 'FixableCount', prop: 'fixableCount' },
             { label: 'ErrorCount', prop: 'errorCount' },
             { label: 'WarningCount', prop: 'warningCount' },
             { label: '文件数', prop: 'fileCount' }
         ],
-        tableData: window.EslintResults.map(v => {
-            return {
-                ...v,
-                open: true
-            };
-        })
+        tableData: [],
+        RankMessages: []
     },
     methods: {
+        getMeta(ruleId = '', key = '') {
+            return get(RulesMeta[ruleId], key);
+        },
+        getRankMessages() {
+            const Messages = [...EslintResults].map(v => v.messages).flat();
+
+            const ruleIdList = [...new Set(Messages.map(v => v.ruleId))];
+
+            const RankMessages = ruleIdList.map(v => {
+                const sameList = Messages.filter(v2 => v2.ruleId === v);
+                const { severity } = sameList[0];
+                const { url, description } = this.getMeta(v, 'docs');
+                const fixable = this.getMeta(v, 'fixable');
+                const severityText = {
+                    1: 'warning',
+                    2: 'error'
+                }[severity];
+                const count = sameList.length;
+                return {
+                    ruleId: v,
+                    url,
+                    fixable,
+                    description,
+                    severityText,
+                    count
+                };
+            });
+
+            this.RankMessages = sortBy(RankMessages, ['count']).reverse();
+        },
         handleOpenItem(index) {
-            this.tableData[index].open = !this.tableData[index].open;
+            this.tableData[index].close = !this.tableData[index].close;
         },
         handleOpenAll() {
             const { openAll } = this;
             this.openAll = !openAll;
             this.tableData.forEach(v => {
-                v.open = this.openAll;
+                v.close = !this.openAll;
             });
+        },
+        handleChangeSort() {
+            const { sortModel } = this;
+            if (sortModel === 1) {
+                this.tableData = sortBy([...EslintResults], ['errorCount', 'warningCount'])
+                    .reverse()
+                    .map(v => {
+                        return {
+                            ...v,
+                            close: false
+                        };
+                    });
+            }
+            if (sortModel === 2) {
+                this.tableData = [...EslintResults].map(v => {
+                    return {
+                        ...v,
+                        close: false
+                    };
+                });
+            }
         }
     },
     created() {
         document.querySelector('#vue-app-root').style.display = 'block';
-        const { tableData } = this;
 
         const errorCount = sum(
-            tableData.map(v => {
+            EslintResults.map(v => {
                 return v.errorCount;
             })
         );
 
         const warningCount = sum(
-            tableData.map(v => {
+            EslintResults.map(v => {
                 return v.warningCount;
             })
         );
 
         const fixableCount = sum(
-            tableData.map(v => {
+            EslintResults.map(v => {
                 return v.fixableErrorCount + v.fixableWarningCount;
             })
         );
 
-        const fileCount = tableData.length;
+        const fileCount = EslintResults.length;
 
-        const successFileCount = tableData.filter(v => {
+        const successFileCount = EslintResults.filter(v => {
             return v.errorCount + v.warningCount === 0;
         }).length;
 
         Object.assign(this.analysis, {
-            errorWarningCount: errorCount + warningCount,
+            errorWarningCount: `${errorCount + warningCount}/(${fixableCount}<span style="font-size: 12px;">🔧</span>)`,
             errorCount,
             warningCount,
-            fixableCount,
             fileCount: `${fileCount} (<span class="color-danger">${fileCount - successFileCount}</span>/<span class="color-success">${successFileCount}</span>)`
         });
+
+        this.handleChangeSort();
+        this.getRankMessages();
     }
 });
 </script>
@@ -223,13 +308,14 @@ body {
     &.close .el-card__body {
         display: none;
     }
-    .el-table td {
-        padding: 0;
-    }
-    .el-table .cell {
-        padding: 0 3px;
-        line-height: 20px;
-    }
+}
+
+.el-table td {
+    padding: 0;
+}
+.el-table .cell {
+    padding: 0 3px;
+    line-height: 20px;
 }
 
 .color {

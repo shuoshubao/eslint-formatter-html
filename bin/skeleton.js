@@ -22,7 +22,7 @@ const scriptText = getInnerHtml('script');
 const lessText = getInnerHtml('style');
 
 less.render(lessText, (e, cssResult) => {
-    writeFileSync(resolvePath('lib/template.text'), templateText);
-    writeFileSync(resolvePath('lib/script.text'), scriptText);
-    writeFileSync(resolvePath('lib/style.text'), cssResult.css);
+    writeFileSync(resolvePath('lib/template.html'), templateText);
+    writeFileSync(resolvePath('lib/script.js'), scriptText);
+    writeFileSync(resolvePath('lib/style.css'), cssResult.css);
 });

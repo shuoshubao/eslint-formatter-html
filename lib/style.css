@@ -55,10 +55,10 @@ body {
 .box-card.close .el-card__body {
   display: none;
 }
-.box-card .el-table td {
+.el-table td {
   padding: 0;
 }
-.box-card .el-table .cell {
+.el-table .cell {
   padding: 0 3px;
   line-height: 20px;
 }
