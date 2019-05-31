@@ -148,6 +148,15 @@ new Vue({
         RankMessages: []
     },
     methods: {
+        initEslintResults() {
+            EslintResults.forEach(v => {
+                v.close = false;
+                v.messages.forEach(v2 => {
+                    const { ruleId } = v2;
+                    v2.url = this.getMeta(ruleId, 'docs.url');
+                });
+            });
+        },
         getMeta(ruleId = '', key = '') {
             return get(RulesMeta[ruleId], key);
         },
@@ -212,6 +221,8 @@ new Vue({
     },
     created() {
         document.querySelector('#vue-app-root').style.display = 'block';
+
+        this.initEslintResults();
 
         const errorCount = sum(
             EslintResults.map(v => {
