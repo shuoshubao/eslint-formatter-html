@@ -1,6 +1,6 @@
 {
   "name": "eslint-formatter-html",
-  "version": "1.1.0",
+  "version": "1.1.2",
   "description": "eslint-formatter-html",
   "main": "index.js",
   "repository": {
@@ -9,7 +9,12 @@
   },
   "author": "shuoshubao <759979885@qq.com>",
   "license": "MIT",
-  "keywords": ["eslint", "eslint-formatter", "eslint-formatter-html", "shuoshubao"],
+  "keywords": [
+    "eslint",
+    "eslint-formatter",
+    "eslint-formatter-html",
+    "shuoshubao"
+  ],
   "scripts": {
     "skeleton": "node bin/skeleton"
   },
@@ -17,7 +22,6 @@
     "js-ejs": "^1.0.0"
   },
   "devDependencies": {
-    "less": "^3.9.0",
-    "lodash": "^4.17.11"
+    "less": "^3.9.0"
   }
 }
