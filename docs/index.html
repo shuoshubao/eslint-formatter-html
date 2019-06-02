@@ -58,7 +58,7 @@
                         </el-radio-group>
                     </span>
                     <el-button
-                        @click="handleOpenAll"
+                        @click="handleOpenCloseAll(openAll)"
                         type="primary"
                         size="mini"
                         style="float: right;"
@@ -130,7 +130,7 @@
                 </el-card>
             </el-card>
         </div>
-        <!-- <script src="https://unpkg.com/vue@2.6.10/dist/vue.min.js"></script> -->
+        <!-- <script src="https://unpkg.com/vue@2.6.10/dist/vue.js"></script> -->
         <script src="https://unpkg.com/vue@2.6.10/dist/vue.min.js"></script>
         <script src="https://unpkg.com/element-ui@2.8.2/lib/index.js"></script>
         <script src="https://unpkg.com/lodash@4.17.11/lodash.js"></script>
@@ -161,6 +161,15 @@
                     RankMessages: []
                 },
                 methods: {
+                    initEslintResults() {
+                        EslintResults.forEach(v => {
+                            v.close = false;
+                            v.messages.forEach(v2 => {
+                                const { ruleId } = v2;
+                                v2.url = this.getMeta(ruleId, 'docs.url');
+                            });
+                        });
+                    },
                     getMeta(ruleId = '', key = '') {
                         return get(RulesMeta[ruleId], key);
                     },
@@ -192,10 +201,13 @@
                         this.RankMessages = sortBy(RankMessages, ['count']).reverse();
                     },
                     handleOpenItem(index) {
-                        this.tableData[index].close = !this.tableData[index].close;
+                        const { close, errorCount, warningCount } = this.tableData[index];
+                        if (errorCount + warningCount === 0) {
+                            return;
+                        }
+                        this.tableData[index].close = !close;
                     },
-                    handleOpenAll() {
-                        const { openAll } = this;
+                    handleOpenCloseAll(openAll) {
                         this.openAll = !openAll;
                         this.tableData.forEach(v => {
                             v.close = !this.openAll;
@@ -204,27 +216,18 @@
                     handleChangeSort() {
                         const { sortModel } = this;
                         if (sortModel === 1) {
-                            this.tableData = sortBy([...EslintResults], ['errorCount', 'warningCount'])
-                                .reverse()
-                                .map(v => {
-                                    return {
-                                        ...v,
-                                        close: false
-                                    };
-                                });
+                            this.tableData = sortBy([...EslintResults], ['errorCount', 'warningCount']).reverse();
                         }
                         if (sortModel === 2) {
-                            this.tableData = [...EslintResults].map(v => {
-                                return {
-                                    ...v,
-                                    close: false
-                                };
-                            });
+                            this.tableData = [...EslintResults];
                         }
+                        this.handleOpenCloseAll(false);
                     }
                 },
                 created() {
                     document.querySelector('#vue-app-root').style.display = 'block';
+
+                    this.initEslintResults();
 
                     const errorCount = sum(
                         EslintResults.map(v => {
