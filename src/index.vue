@@ -1,11 +1,14 @@
 <template>
     <div id="vue-app-root" style="display: none;">
         <el-card class="eslint-analysis" :body-style="{padding: '10px'}" header="Eslint统计">
-            <el-row style="padding-bottom: 10px;">
+            <el-row style="padding-bottom: 10px;" v-if="analysis.errorCount + analysis.warningCount">
                 <el-col :span="4" v-for="(item, index) in analysisList" :key="index">
                     <span class="label">{{item.label}}:</span>
                     <span class="value" v-html="analysis[item.prop]"></span>
                 </el-col>
+            </el-row>
+            <el-row v-else>
+                <el-progress type="circle" :percentage="100" status="success"></el-progress>
             </el-row>
             <el-row v-if="!!RankMessages.length">
                 <el-col>
@@ -297,6 +300,7 @@ body {
         color: #67c23a;
         background: #f0f9eb;
         border-color: #c2e7b0;
+        cursor: default;
     }
     &.is-warning .el-card__header {
         color: #e6a23c;

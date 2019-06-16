@@ -2,6 +2,10 @@
 # yarn lockfile v1
 
 
+"@nbfe/js2html@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.npm.taobao.org/@nbfe/js2html/download/@nbfe/js2html-1.0.0.tgz#da6a7864d3da947699ee7cd1430189e2828af8ba"
+
 ajv@^6.5.5:
   version "6.10.0"
   resolved "https://registry.npm.taobao.org/ajv/download/ajv-6.10.0.tgz#90d0d54439da587cd7e843bfb7045f50bd22bdf1"
@@ -46,6 +50,12 @@ bcrypt-pbkdf@^1.0.0:
 caseless@~0.12.0:
   version "0.12.0"
   resolved "https://registry.npm.taobao.org/caseless/download/caseless-0.12.0.tgz#1b681c21ff84033c826543090689420d187151dc"
+
+clean-css@^4.2.1:
+  version "4.2.1"
+  resolved "https://registry.npm.taobao.org/clean-css/download/clean-css-4.2.1.tgz#2d411ef76b8569b6d0c84068dabe85b0aa5e5c17"
+  dependencies:
+    source-map "~0.6.0"
 
 clone@^2.1.2:
   version "2.1.2"
@@ -157,10 +167,6 @@ isstream@~0.1.2:
   version "0.1.2"
   resolved "https://registry.npm.taobao.org/isstream/download/isstream-0.1.2.tgz#47e63f7af55afa6f92e1500e690eb8b8529c099a"
 
-js-ejs@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.npm.taobao.org/js-ejs/download/js-ejs-1.0.0.tgz#66fe271c05e5be5b176b5af4a8409a6dfc2aca67"
-
 jsbn@~0.1.0:
   version "0.1.1"
   resolved "https://registry.npm.taobao.org/jsbn/download/jsbn-0.1.1.tgz#a5e654c2e5a2deb5f201d96cefbca80c0ef2f513"
@@ -204,7 +210,6 @@ less@^3.9.0:
 lodash@^4.17.11:
   version "4.17.11"
   resolved "https://registry.npm.taobao.org/lodash/download/lodash-4.17.11.tgz#b39ea6229ef607ecd89e2c8df12536891cac9b8d"
-  integrity sha1-s56mIp72B+zYniyN8SU2iRysm40=
 
 mime-db@1.40.0:
   version "1.40.0"

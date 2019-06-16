@@ -1,5 +1,5 @@
 const { relative, resolve } = require('path');
-const getDocText = require('js-ejs');
+const getDocText = require('@nbfe/js2html');
 
 const rootPath = process.cwd();
 

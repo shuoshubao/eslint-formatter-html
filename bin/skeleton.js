@@ -1,7 +1,8 @@
 const { readFileSync, writeFileSync } = require('fs');
 const { resolve } = require('path');
 const less = require('less');
-const getDocText = require('js-ejs');
+const CleanCSS = require('clean-css');
+const getDocText = require('@nbfe/js2html');
 
 const resolvePath = (p = '') => {
     return resolve(__dirname, '..', p);
@@ -17,12 +18,18 @@ const getInnerHtml = (tagName = 'template') => {
         .join('\n');
 };
 
+const writeFileToLib = (fileName = '', content = '') => {
+    writeFileSync(resolvePath(`lib/${fileName}`), `${content}\n`);
+};
+
 const templateText = getInnerHtml('template');
 const scriptText = getInnerHtml('script');
 const lessText = getInnerHtml('style');
 
 less.render(lessText, (e, cssResult) => {
-    writeFileSync(resolvePath('lib/template.html'), templateText);
-    writeFileSync(resolvePath('lib/script.js'), scriptText);
-    writeFileSync(resolvePath('lib/style.css'), cssResult.css);
+    const styleText = new CleanCSS({}).minify(cssResult.css).styles;
+
+    writeFileToLib('template.html', templateText);
+    writeFileToLib('script.js', scriptText);
+    writeFileToLib('style.css', styleText);
 });
