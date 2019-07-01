@@ -70,6 +70,9 @@
                     <span class="el-icon-arrow-right"></span>
                     <span class="el-icon-arrow-down"></span>
                     <span class="filePath" @click.stop>{{item.filePath}}</span>
+                    <el-tooltip content="复制文件路径" placement="top">
+                        <span class="el-icon-document-copy" v-clipboard:copy="item.filePath" v-clipboard:success="onCopyFilePath" @click.stop></span>
+                    </el-tooltip>
                     <b class="error-warning-count" style="font-size: 12px;">
                         <span>{{item.errorCount + item.warningCount}} problems</span>
                         <span v-if="item.errorCount + item.warningCount !== 0">
@@ -203,6 +206,9 @@ new Vue({
                 v.close = !this.openAll;
             });
         },
+        onCopyFilePath(e) {
+            this.$message.success(`复制成功: ${e.text}`);
+        },
         handleChangeSort() {
             const { sortModel } = this;
             if (sortModel === 1) {
@@ -273,10 +279,12 @@ body {
     border-radius: 0;
     .el-card__header {
         padding: 5px 3px;
-        cursor: pointer;
+        user-select: none;
         .filePath {
-            cursor: default;
-            padding: 0 20px 0 40px;
+            padding-left: 40px;
+        }
+        .el-icon-document-copy {
+            cursor: pointer;
         }
         .error-warning-count {
             float: right;

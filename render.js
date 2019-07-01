@@ -77,6 +77,11 @@
     await appendElement({
         targetNode: nodeBody,
         tagName: 'script',
+        src: 'https://unpkg.com/vue-clipboard2@0.3.0/dist/vue-clipboard.min.js'
+    });
+    await appendElement({
+        targetNode: nodeBody,
+        tagName: 'script',
         src: 'https://unpkg.com/lodash@4.17.11/lodash.js'
     });
     await appendElement({
