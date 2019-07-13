@@ -32,9 +32,13 @@
         });
     };
 
-    const templateText = await fetchFile('lib/template.html');
-    const scriptText = await fetchFile('lib/script.js');
-    const styleText = await fetchFile('lib/style.css');
+    const Resources = [
+        // 'https://unpkg.com/vue@2.6.10/dist/vue.js',
+        'https://unpkg.com/vue@2.6.10/dist/vue.min.js',
+        'https://unpkg.com/element-ui@2.8.2/lib/index.js',
+        'https://unpkg.com/vue-clipboard2@0.3.0/dist/vue-clipboard.min.js',
+        'https://unpkg.com/lodash@4.17.11/lodash.js'
+    ];
 
     appendElement({
         targetNode: nodeHead,
@@ -45,48 +49,33 @@
         }
     });
 
-    appendElement({
-        targetNode: nodeHead,
-        tagName: 'link',
-        attrs: {
-            rel: 'shortcut icon',
-            href: 'https://eslint.org/img/favicon.512x512.png'
-        }
-    });
-
-    await appendElement({
-        targetNode: nodeHead,
-        tagName: 'style',
-        innerHTML: styleText
-    });
-    await appendElement({
-        targetNode: nodeBody,
-        tagName: 'div',
-        innerHTML: templateText
-    });
-    await appendElement({
-        targetNode: nodeBody,
-        tagName: 'script',
-        src: 'https://unpkg.com/vue@2.6.10/dist/vue.min.js'
-    });
-    await appendElement({
-        targetNode: nodeBody,
-        tagName: 'script',
-        src: 'https://unpkg.com/element-ui@2.8.2/lib/index.js'
-    });
-    await appendElement({
-        targetNode: nodeBody,
-        tagName: 'script',
-        src: 'https://unpkg.com/vue-clipboard2@0.3.0/dist/vue-clipboard.min.js'
-    });
-    await appendElement({
-        targetNode: nodeBody,
-        tagName: 'script',
-        src: 'https://unpkg.com/lodash@4.17.11/lodash.js'
-    });
-    await appendElement({
-        targetNode: nodeBody,
-        tagName: 'script',
-        innerHTML: scriptText
+    Promise.all([
+        fetchFile('lib/template.html'),
+        fetchFile('lib/script.js'),
+        fetchFile('lib/style.css'),
+        ...Resources.map(v => {
+            return appendElement({
+                targetNode: nodeBody,
+                tagName: 'script',
+                src: v
+            });
+        })
+    ]).then(res => {
+        const [templateText, scriptText, styleText] = res;
+        appendElement({
+            targetNode: nodeHead,
+            tagName: 'style',
+            innerHTML: styleText
+        });
+        appendElement({
+            targetNode: nodeBody,
+            tagName: 'div',
+            innerHTML: templateText
+        });
+        appendElement({
+            targetNode: nodeBody,
+            tagName: 'script',
+            innerHTML: scriptText
+        });
     });
 })();
