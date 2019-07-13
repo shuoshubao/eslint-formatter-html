@@ -131,7 +131,7 @@
 
 <script>
 const { get, sortBy, sum } = _;
-const { EslintResults, RulesMeta } = window;
+const { EslintResults = [], RulesMeta = [] } = window;
 Vue.use(ELEMENT);
 new Vue({
     el: '#vue-app-root',
