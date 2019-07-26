@@ -36,7 +36,6 @@
         // 'https://unpkg.com/vue@2.6.10/dist/vue.js',
         'https://unpkg.com/vue@2.6.10/dist/vue.min.js',
         'https://unpkg.com/element-ui@2.8.2/lib/index.js',
-        'https://unpkg.com/vue-clipboard2@0.3.0/dist/vue-clipboard.min.js',
         'https://unpkg.com/lodash@4.17.11/lodash.js'
     ];
 

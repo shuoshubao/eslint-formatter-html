@@ -70,7 +70,7 @@
                     <span class="el-icon-arrow-down"></span>
                     <span class="filePath" @click.stop>{{item.filePath}}</span>
                     <el-tooltip content="复制文件路径" placement="top">
-                        <span class="el-icon-document-copy" v-clipboard:copy="item.filePath" v-clipboard:success="onCopyFilePath" @click.stop></span>
+                        <span class="el-icon-document-copy" @click.stop="handleCopyFilePath(item)"></span>
                     </el-tooltip>
                     <b class="error-warning-count" style="font-size: 12px;">
                         <span>{{item.errorCount + item.warningCount}} problems</span>

@@ -163,8 +163,7 @@
                     <span class="el-icon-arrow-down"></span>
                     <span class="filePath" @click.stop>{{item.filePath}}</span>
                     <el-tooltip content="复制文件路径" placement="top">
-                        <span class="el-icon-document-copy" v-clipboard:copy="item.filePath"
-                            v-clipboard:success="onCopyFilePath" @click.stop></span>
+                        <span class="el-icon-document-copy" @click.stop="handleCopyFilePath(item)"></span>
                     </el-tooltip>
                     <b class="error-warning-count" style="font-size: 12px;">
                         <span>{{item.errorCount + item.warningCount}} problems</span>
@@ -210,7 +209,6 @@
     <script src="https://unpkg.com/vue@2.6.10/dist/vue.min.js"></script>
     <script src="https://unpkg.com/element-ui@2.8.2/lib/index.js"></script>
     <script src="https://unpkg.com/lodash@4.17.11/lodash.js"></script>
-    <script src="https://unpkg.com/vue-clipboard2@0.3.0/dist/vue-clipboard.min.js"></script>
     <script src="EslintResults.js"></script>
     <script src="RulesMeta.js"></script>
     <script>
@@ -290,8 +288,17 @@
                         v.close = !this.openAll;
                     });
                 },
-                onCopyFilePath(e) {
-                    this.$message.success(`复制成功: ${e.text}`);
+                handleCopyFilePath({ filePath }) {
+                    this.handleCopy(filePath);
+                    this.$message.success(`复制成功: ${filePath}`);
+                },
+                handleCopy(text) {
+                    const input = document.createElement('input');
+                    document.body.appendChild(input);
+                    input.setAttribute('value', text);
+                    input.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(input);
                 },
                 handleChangeSort() {
                     const { sortModel } = this;
