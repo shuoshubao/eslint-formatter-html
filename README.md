@@ -29,6 +29,7 @@ npx eslint **/src/**/*.{js,vue} --ignore-path .gitignore -f html -o ESLintReport
 * 路径显示为 *相对路径* (相对于项目根路径)
 * 显示宽度不设置最大值 `1000px`
 * 增加全部展开/折叠功能, 默认全展开
+* 支持ansi码展示
 * 显示一些统计分析信息
 
 

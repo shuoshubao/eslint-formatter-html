@@ -1,4 +1,5 @@
 const { relative, resolve } = require('path');
+const stripAnsi = require('strip-ansi');
 const getDocText = require('@nbfe/js2html');
 
 const rootPath = process.cwd();
@@ -12,6 +13,12 @@ const formatEslintResults = (results = []) => {
     results.forEach(v => {
         const { filePath } = v;
         v.filePath = relative(rootPath, filePath);
+        v.messages = v.messages.map(v2 => {
+            return {
+                ...v2,
+                message: stripAnsi(v2.message)
+            };
+        });
         delete v.source;
         delete v.output;
     });

@@ -27,7 +27,7 @@
                             </template>
                         </el-table-column>
                         <el-table-column label="ruleId" width="180">
-                            <template slot-scope="scope">
+                            <template slot-scope="scope" v-if="scope.row.ruleId">
                                 <a :href="scope.row.url" target="_blank">
                                     <el-button size="small" type="text">{{scope.row.ruleId}}</el-button>
                                 </a>
@@ -113,11 +113,11 @@
                     </el-table-column>
                     <el-table-column>
                         <template slot-scope="scope">
-                            <div>{{scope.row.message}}</div>
+                            <pre style="margin: 0;">{{scope.row.message}}</pre>
                         </template>
                     </el-table-column>
                     <el-table-column width="210" align="right">
-                        <template slot-scope="scope">
+                        <template slot-scope="scope" v-if="scope.row.ruleId">
                             <a :href="scope.row.url" target="_blank">
                                 <el-button type="text" size="small">{{scope.row.ruleId}}</el-button>
                             </a>
@@ -164,7 +164,7 @@ new Vue({
             });
         },
         getMeta(ruleId = '', key = '') {
-            return get(RulesMeta[ruleId], key);
+            return get(RulesMeta[ruleId], key, '');
         },
         getRankMessages() {
             const Messages = [...EslintResults].map(v => v.messages).flat();

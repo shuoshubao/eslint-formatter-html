@@ -19,7 +19,8 @@
     "skeleton": "node bin/skeleton"
   },
   "dependencies": {
-    "@nbfe/js2html": "^1.0.0"
+    "@nbfe/js2html": "^1.0.0",
+    "strip-ansi": "^5.2.0"
   },
   "devDependencies": {
     "clean-css": "^4.2.1",
