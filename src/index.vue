@@ -342,6 +342,10 @@ body {
     line-height: 20px;
 }
 
+.el-button--text {
+    user-select: text;
+}
+
 .color {
     &-success {
         color: #67c23a;
