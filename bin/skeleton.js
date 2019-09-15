@@ -2,7 +2,6 @@ const { readFileSync, writeFileSync } = require('fs');
 const { resolve } = require('path');
 const less = require('less');
 const CleanCSS = require('clean-css');
-const getDocText = require('@nbfe/js2html');
 
 const resolvePath = (p = '') => {
     return resolve(__dirname, '..', p);

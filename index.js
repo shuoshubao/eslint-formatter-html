@@ -41,11 +41,5 @@ module.exports = function(results, data) {
 
     formatEslintResults(results);
 
-    return getDocText(documentConfig => {
-        documentConfig.script = [
-            {
-                __text: getScriptText(results, rulesMeta)
-            }
-        ];
-    });
+    return getDocText({ script: [{ text: getScriptText(results, rulesMeta) }] });
 };
