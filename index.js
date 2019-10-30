@@ -1,3 +1,4 @@
+const { readFileSync } = require('fs');
 const { relative, resolve } = require('path');
 const stripAnsi = require('strip-ansi');
 const getDocText = require('@nbfe/js2html');
@@ -24,16 +25,8 @@ const formatEslintResults = (results = []) => {
     });
 };
 
-const getScriptText = (results, rulesMeta) => {
-    return `
-    window.EslintResults = ${JSON.stringify(results)};
-    window.RulesMeta = ${JSON.stringify(rulesMeta)};
-
-    ;;(async () => {
-        const replJavasScript = (url = '') => fetch(url).then(res => res.text()).then(res => eval(res));
-        replJavasScript('https://raw.githubusercontent.com/shuoshubao/eslint-formatter-html/master/render.js');
-    })();;
-`;
+const getFileContent = fileName => {
+    return readFileSync(resolve(__dirname, 'lib', fileName)).toString();
 };
 
 module.exports = function(results, data) {
@@ -41,5 +34,27 @@ module.exports = function(results, data) {
 
     formatEslintResults(results);
 
-    return getDocText({ script: [{ text: getScriptText(results, rulesMeta) }] });
+    return getDocText({
+        style: [
+            'https://unpkg.com/element-ui@2.8.2/lib/theme-chalk/index.css',
+            {
+                text: getFileContent('style.css')
+            }
+        ],
+        script: [
+            { src: 'https://unpkg.com/vue@2.6.10/dist/vue.min.js' },
+            { src: 'https://unpkg.com/element-ui@2.8.2/lib/index.js' },
+            { src: 'https://unpkg.com/lodash@4.17.11/lodash.js' },
+            {
+                text: `window.EslintResults = ${JSON.stringify(results)}`
+            },
+            {
+                text: `window.RulesMeta = ${JSON.stringify(rulesMeta)};`
+            },
+            {
+                text: getFileContent('script.js')
+            }
+        ],
+        bodyHtml: [getFileContent('template.html')]
+    });
 };
