@@ -1,6 +1,6 @@
 {
   "name": "eslint-formatter-html",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "eslint-formatter-html",
   "main": "index.js",
   "repository": {
@@ -19,7 +19,7 @@
     "skeleton": "node bin/skeleton"
   },
   "dependencies": {
-    "@nbfe/js2html": "^1.1.0",
+    "@nbfe/js2html": "^1.1.1",
     "strip-ansi": "^5.2.0"
   },
   "devDependencies": {

@@ -35,6 +35,13 @@ module.exports = function(results, data) {
     formatEslintResults(results);
 
     return getDocText({
+        title: 'EslintReport',
+        link: [
+            {
+                rel: 'icon',
+                href: 'https://eslint.org/assets/img/favicon.512x512.png'
+            }
+        ],
         style: [
             'https://unpkg.com/element-ui@2.8.2/lib/theme-chalk/index.css',
             {
