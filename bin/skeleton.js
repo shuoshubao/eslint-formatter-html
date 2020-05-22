@@ -8,9 +8,9 @@ const resolvePath = (p = '') => {
     return resolve(__dirname, '..', p);
 };
 
-const OriginalTemplate = readFileSync(resolvePath('src/index.vue')).toString();
+const OriginalTemplate = readFileSync(resolvePath('bin/index.vue')).toString();
 
-const ejsText = readFileSync(resolvePath('lib/index.ejs')).toString();
+const ejsText = readFileSync(resolvePath('bin/index.ejs')).toString();
 
 const getInnerHtml = (tagName = 'template') => {
     const TagReg = new RegExp(`<${tagName}\\s*.*>(\\s|\\S)*<\/${tagName}>`);
@@ -20,10 +20,6 @@ const getInnerHtml = (tagName = 'template') => {
         .join('\n');
 };
 
-const writeFileToLib = (fileName = '', content = '') => {
-    writeFileSync(resolvePath(`lib/${fileName}`), `${content}\n`);
-};
-
 const templateText = getInnerHtml('template');
 const scriptText = getInnerHtml('script');
 const lessText = getInnerHtml('style');
@@ -31,10 +27,6 @@ const lessText = getInnerHtml('style');
 less.render(lessText, (e, cssResult) => {
     const styleText = new CleanCSS({}).minify(cssResult.css).styles;
 
-    writeFileToLib('template.html', templateText);
-    writeFileToLib('script.js', scriptText);
-    writeFileToLib('style.css', styleText);
-
-    const content = ejs.render(ejsText, { templateText });
-    writeFileSync('docs/index.html', content);
+    const content = ejs.render(ejsText, { templateText, scriptText, styleText });
+    writeFileSync('index.html', content);
 });

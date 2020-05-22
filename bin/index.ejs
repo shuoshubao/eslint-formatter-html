@@ -5,7 +5,9 @@
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="stylesheet" href="https://static.meituan.net/bs/@ss/mtd-vue/0.3.5/lib/theme2/index.css" />
-        <link rel="stylesheet" href="../lib/style.css" />
+        <style>
+            <%- styleText %>
+        </style>
     </head>
 
     <body>
@@ -15,8 +17,10 @@
         <script src="https://static.meituan.net/bs/vue/2.6.11/dist/vue.js"></script>
         <script src="https://static.meituan.net/bs/@ss/mtd-vue/0.3.5/lib/index.js"></script>
         <script src="https://static.meituan.net/bs/lodash/4.17.15/lodash.min.js"></script>
-        <script src="EslintResults.js"></script>
-        <script src="RulesMeta.js"></script>
-        <script src="../lib/script.js"></script>
+        <script src="docs/EslintResults.js"></script>
+        <script src="docs/RulesMeta.js"></script>
+        <script>
+            <%- scriptText %>
+        </script>
     </body>
 </html>
