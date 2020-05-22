@@ -43,15 +43,15 @@ module.exports = function(results, data) {
             }
         ],
         style: [
-            'https://unpkg.com/element-ui@2.8.2/lib/theme-chalk/index.css',
+            'https://static.meituan.net/bs/@ss/mtd-vue/0.3.5/lib/theme2/index.css',
             {
                 text: getFileContent('style.css')
             }
         ],
         script: [
-            { src: 'https://unpkg.com/vue@2.6.10/dist/vue.min.js' },
-            { src: 'https://unpkg.com/element-ui@2.8.2/lib/index.js' },
-            { src: 'https://unpkg.com/lodash@4.17.11/lodash.js' },
+            { src: 'https://static.meituan.net/bs/vue/2.6.11/vue.min.js' },
+            { src: 'https://static.meituan.net/bs/@ss/mtd-vue/0.3.5/lib/index.js' },
+            { src: 'https://static.meituan.net/bs/lodash/4.17.15/lodash.min.js' },
             {
                 text: `window.EslintResults = ${JSON.stringify(results)}`
             },
