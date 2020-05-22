@@ -1,50 +1,12 @@
 module.exports = {
-    parser: 'babel',
-    arrowParens: 'avoid',
-    bracketSpacing: true,
-    insertPragma: false,
-    jsxBracketSameLine: false,
-    jsxSingleQuote: false,
-    printWidth: 160,
-    proseWrap: 'never',
-    requirePragma: false,
-    semi: true,
-    singleQuote: true,
-    tabWidth: 4,
-    trailingComma: 'none',
+    printWidth: 120,
     useTabs: false,
-    overrides: [
-        {
-            files: '*.json',
-            options: {
-                parser: 'json',
-                tabWidth: 2
-            }
-        },
-        {
-            files: '*.vue',
-            options: {
-                parser: 'vue'
-            }
-        },
-        {
-            files: '*.{css,scss,less}',
-            options: {
-                parser: 'css',
-                singleQuote: false
-            }
-        },
-        {
-            files: '*.md',
-            options: {
-                parser: 'markdown'
-            }
-        },
-        {
-            files: '*.{yml,yaml}',
-            options: {
-                parser: 'yaml'
-            }
-        }
-    ]
+    tabWidth: 4,
+    semi: true, // 分号
+    singleQuote: true, // 单引号
+    trailingComma: 'none', // 不要尾逗号
+    proseWrap: 'never', // markdown 换行
+    arrowParens: 'avoid',
+    bracketSpacing: true, // { a }
+    htmlWhitespaceSensitivity: 'ignore'
 };

@@ -1,138 +1,127 @@
 <template>
     <div id="vue-app-root" style="display: none;">
-        <el-card class="eslint-analysis" :body-style="{padding: '10px'}" header="Eslint统计">
-            <el-row style="padding-bottom: 10px;" v-if="analysis.errorCount + analysis.warningCount">
-                <el-col :span="4" v-for="(item, index) in analysisList" :key="index">
-                    <span class="label">{{item.label}}:</span>
+        <mtd-card class="eslint-analysis" title="Eslint统计">
+            <mtd-row style="padding-bottom: 10px;" v-if="analysis.errorCount + analysis.warningCount">
+                <mtd-col :span="4" v-for="(item, index) in analysisList" :key="index">
+                    <span class="label">{{ item.label }}:</span>
                     <span class="value" v-html="analysis[item.prop]"></span>
-                </el-col>
-            </el-row>
-            <el-row v-else>
-                <el-progress type="circle" :percentage="100" status="success"></el-progress>
-            </el-row>
-            <el-row v-if="!!RankMessages.length">
-                <el-col>
-                    <el-table
-                        :data="RankMessages"
-                        style="width: 100%;"
-                        size="mini"
-                        border
-                        :max-height="32 * 6 + 1"
-                    >
-                        <el-table-column label="rank" width="50">
+                </mtd-col>
+            </mtd-row>
+            <mtd-row v-else>
+                <mtd-progress type="circle" :percentage="100" status="success"></mtd-progress>
+            </mtd-row>
+            <mtd-row v-if="!!RankMessages.length">
+                <mtd-col>
+                    <mtd-table :data="RankMessages" style="width: 100%;" size="small" border>
+                        <mtd-table-column label="rank" width="60">
                             <template slot-scope="scope">
-                                <span
-                                    :class="{'color-danger': scope.$index < 5}"
-                                >{{scope.$index + 1}}</span>
+                                <span :class="{ 'color-danger': scope.$index < 5 }">{{ scope.$index + 1 }}</span>
                             </template>
-                        </el-table-column>
-                        <el-table-column label="count" prop="count" width="60"></el-table-column>
-                        <el-table-column label="severity" prop="severityText" width="80"></el-table-column>
-                        <el-table-column label="ruleId" min-width="200">
+                        </mtd-table-column>
+                        <mtd-table-column label="count" prop="count" width="70"></mtd-table-column>
+                        <mtd-table-column label="severity" prop="severityText" width="80"></mtd-table-column>
+                        <mtd-table-column label="ruleId" width="300">
                             <template slot-scope="scope" v-if="scope.row.ruleId">
                                 <a :href="scope.row.url" target="_blank">
-                                    <el-button size="small" type="text">{{scope.row.ruleId}}</el-button>
+                                    <mtd-button size="small" type="text-primary">{{ scope.row.ruleId }}</mtd-button>
                                 </a>
                                 <span v-if="scope.row.fixable" style="font-size: 12px;">🔧</span>
                             </template>
-                        </el-table-column>
-                        <el-table-column label="description" prop="description"></el-table-column>
-                    </el-table>
-                </el-col>
-            </el-row>
-        </el-card>
-        <el-card class="eslint-results" :body-style="{padding: '10px'}">
-            <div slot="header" style="overflow: hidden;">
+                        </mtd-table-column>
+                        <mtd-table-column label="description" prop="description"></mtd-table-column>
+                    </mtd-table>
+                </mtd-col>
+            </mtd-row>
+        </mtd-card>
+        <mtd-card class="eslint-results" v-if="!!RankMessages.length">
+            <div slot="title" style="overflow: hidden;">
                 <span style="float: left;">Eslint报告</span>
                 <span style="float: left; margin-left: 50px;">
                     <span style="margin-right: : 10px;">排序:</span>
-                    <el-radio-group v-model="sortModel" @change="handleChangeSort" size="mini">
-                        <el-radio-button :label="1">错误数</el-radio-button>
-                        <el-radio-button :label="2">文件路径</el-radio-button>
-                    </el-radio-group>
+                    <mtd-radio-group v-model="sortModel" @change="handleChangeSort" size="small">
+                        <mtd-radio-button :value="1">错误数</mtd-radio-button>
+                        <mtd-radio-button :value="2">文件路径</mtd-radio-button>
+                    </mtd-radio-group>
                 </span>
-                <el-button
-                    @click="handleOpenCloseAll(openAll)"
-                    type="primary"
-                    size="mini"
-                    style="float: right;"
-                >{{openAll ? '全部折叠' : '全部展开'}}</el-button>
+                <mtd-button @click="handleOpenCloseAll(openAll)" type="primary" size="small" style="float: right;">
+                    {{ openAll ? '全部折叠' : '全部展开' }}
+                </mtd-button>
             </div>
-            <el-card
-                :class="['box-card', item.close ? 'close' : 'open', {'is-error': item.errorCount, 'is-warning': item.errorCount === 0 && item.warningCount, 'is-success': item.errorCount + item.warningCount === 0}]"
-                :body-style="{padding: 0}"
+            <mtd-card
+                :class="[
+                    'box-card',
+                    item.close ? 'close' : 'open',
+                    {
+                        'is-error': item.errorCount,
+                        'is-warning': item.errorCount === 0 && item.warningCount,
+                        'is-success': item.errorCount + item.warningCount === 0
+                    }
+                ]"
+                :body-style="{ padding: 0 }"
                 shadow="never"
                 v-for="(item, index) in tableData"
                 :key="index"
             >
-                <div slot="header" @click="() => handleOpenItem(index)">
-                    <span class="el-icon-check"></span>
-                    <span class="el-icon-arrow-right"></span>
-                    <span class="el-icon-arrow-down"></span>
-                    <span class="filePath" @click.stop>{{item.filePath}}</span>
-                    <el-tooltip content="复制文件路径" placement="top">
-                        <span class="el-icon-document-copy" @click.stop="handleCopyFilePath(item)"></span>
-                    </el-tooltip>
+                <div slot="title" @click="() => handleOpenItem(index)">
+                    <mtd-icon name="check"></mtd-icon>
+                    <mtd-icon name="right"></mtd-icon>
+                    <mtd-icon name="down"></mtd-icon>
+                    <span class="filePath" @click.stop>{{ item.filePath }}</span>
+                    <mtd-tooltip content="复制文件路径" placement="top">
+                        <mtd-icon name="copy-o" @click.stop="handleCopyFilePath(item)" />
+                    </mtd-tooltip>
                     <b class="error-warning-count" style="font-size: 12px;">
-                        <span>{{item.errorCount + item.warningCount}} problems</span>
+                        <span>{{ item.errorCount + item.warningCount }} problems</span>
                         <span v-if="item.errorCount + item.warningCount !== 0">
                             <span>(</span>
-                            <span>{{item.errorCount}} errors,</span>
-                            <span>{{item.warningCount}} warnings,</span>
-                            <span>{{item.fixableErrorCount + item.fixableWarningCount}} fixable</span>
+                            <span>{{ item.errorCount }} errors,</span>
+                            <span>{{ item.warningCount }} warnings,</span>
+                            <span>{{ item.fixableErrorCount + item.fixableWarningCount }} fixable</span>
                             <span>)</span>
                         </span>
                     </b>
                 </div>
-                <el-table
+                <mtd-table
                     v-show="item.messages.length"
                     :data="item.messages"
                     :show-header="false"
                     style="width: 100%"
-                    size="mini"
+                    size="small"
                     :max-height="41 * 100"
                 >
-                    <el-table-column width="60">
-                        <template
-                            slot-scope="scope"
-                        >{{[scope.row.line, scope.row.column].join(':')}}</template>
-                    </el-table-column>
-                    <el-table-column width="80">
+                    <mtd-table-column width="70">
                         <template slot-scope="scope">
-                            <el-button
-                                v-if="scope.row.severity === 1"
-                                type="text"
-                                class="color-warning"
-                            >Warning</el-button>
-                            <el-button
-                                v-if="scope.row.severity === 2"
-                                type="text"
-                                class="color-danger"
-                            >Error</el-button>
+                            {{ [scope.row.line, scope.row.column].join(':') }}
                         </template>
-                    </el-table-column>
-                    <el-table-column>
+                    </mtd-table-column>
+                    <mtd-table-column width="90">
                         <template slot-scope="scope">
-                            <pre style="margin: 0;">{{scope.row.message}}</pre>
+                            <span v-if="scope.row.severity === 1" class="color-warning">Warning</span>
+                            <span v-if="scope.row.severity === 2" class="color-danger">Error</span>
                         </template>
-                    </el-table-column>
-                    <el-table-column width="210" align="right">
+                    </mtd-table-column>
+                    <mtd-table-column>
+                        <template slot-scope="scope">
+                            <pre style="margin: 0;">{{ scope.row.message }}</pre>
+                        </template>
+                    </mtd-table-column>
+                    <mtd-table-column width="210" align="right">
                         <template slot-scope="scope" v-if="scope.row.ruleId">
                             <a :href="scope.row.url" target="_blank">
-                                <el-button type="text" size="small">{{scope.row.ruleId}}</el-button>
+                                <mtd-button type="text-primary" size="small">{{ scope.row.ruleId }}</mtd-button>
                             </a>
                         </template>
-                    </el-table-column>
-                </el-table>
-            </el-card>
-        </el-card>
+                    </mtd-table-column>
+                </mtd-table>
+            </mtd-card>
+        </mtd-card>
     </div>
 </template>
 
 <script>
 const { get, sortBy, sum } = _;
 const { EslintResults = [], RulesMeta = [] } = window;
-Vue.use(ELEMENT);
+Vue.use(MTD);
 new Vue({
     el: '#vue-app-root',
     data: {
@@ -208,7 +197,7 @@ new Vue({
         },
         handleCopyFilePath({ filePath }) {
             this.handleCopy(filePath);
-            this.$message.success(`复制成功: ${filePath}`);
+            this.$mtd.message({ type: 'success', message: `复制成功: ${filePath}` });
         },
         handleCopy(text) {
             const input = document.createElement('input');
@@ -262,7 +251,8 @@ new Vue({
             errorWarningCount: `${errorCount + warningCount}/(${fixableCount}<span style="font-size: 12px;">🔧</span>)`,
             errorCount,
             warningCount,
-            fileCount: `${fileCount} (<span class="color-danger">${fileCount - successFileCount}</span>/<span class="color-success">${successFileCount}</span>)`
+            fileCount: `${fileCount} (<span class="color-danger">${fileCount -
+                successFileCount}</span>/<span class="color-success">${successFileCount}</span>)`
         });
 
         this.handleChangeSort();
@@ -283,66 +273,76 @@ body {
     margin-top: 10px;
 }
 
+.mtd-card-title,
+.mtd-card-body {
+    padding: 10px;
+}
+
 .box-card {
     border: 0;
     border-radius: 0;
-    .el-card__header {
+    .mtd-card-title {
         padding: 5px 3px;
         user-select: none;
         .filePath {
             padding-left: 40px;
         }
-        .el-icon-document-copy {
+        .mtdicon {
             cursor: pointer;
         }
         .error-warning-count {
             float: right;
         }
-        .el-icon-check,
-        .el-icon-arrow-right,
-        .el-icon-arrow-down {
+        .mtdicon-check,
+        .mtdicon-right,
+        .mtdicon-down {
             display: none;
         }
     }
-    &.is-success .el-icon-check {
+
+    .mtd-card-body {
+        padding: 0;
+    }
+
+    &.is-success .mtdicon-check {
         display: inline;
     }
-    &:not(.is-success).open .el-icon-arrow-down {
+    &:not(.is-success).open .mtdicon-down {
         display: inline;
     }
-    &:not(.is-success).close .el-icon-arrow-right {
+    &:not(.is-success).close .mtdicon-right {
         display: inline;
     }
-    &.is-success .el-card__header {
+    &.is-success .mtd-card-title {
         color: #67c23a;
         background: #f0f9eb;
         border-color: #c2e7b0;
         cursor: default;
     }
-    &.is-warning .el-card__header {
+    &.is-warning .mtd-card-title {
         color: #e6a23c;
         background: #fdf6ec;
         border-color: #f5dab1;
     }
-    &.is-error .el-card__header {
+    &.is-error .mtd-card-title {
         background-color: #fef0f0;
         color: #f56c6c;
         border-color: #fbc4c4;
     }
-    &.close .el-card__body {
+    &.close .mtd-card-body {
         display: none;
     }
 }
 
-.el-table td {
+.mtd-table td {
     padding: 0;
 }
-.el-table .cell {
+.mtd-table .cell {
     padding: 0 3px;
     line-height: 20px;
 }
 
-.el-button--text {
+.mtd-button--text {
     user-select: text;
 }
 

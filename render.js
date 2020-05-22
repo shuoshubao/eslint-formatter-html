@@ -33,10 +33,10 @@
     };
 
     const Resources = [
-        // 'https://unpkg.com/vue@2.6.10/dist/vue.js',
-        'https://unpkg.com/vue@2.6.10/dist/vue.min.js',
-        'https://unpkg.com/element-ui@2.8.2/lib/index.js',
-        'https://unpkg.com/lodash@4.17.11/lodash.js'
+        // 'https://static.meituan.net/bs/vue/2.6.11/dist/vue.js',
+        'https://static.meituan.net/bs/vue/2.6.11/vue.min.js',
+        'https://static.meituan.net/bs/@ss/mtd-vue/latest/lib/index.js',
+        'https://static.meituan.net/bs/lodash/4.17.15/lodash.min.js'
     ];
 
     appendElement({
@@ -44,7 +44,7 @@
         tagName: 'link',
         attrs: {
             rel: 'stylesheet',
-            href: 'https://unpkg.com/element-ui@2.8.2/lib/theme-chalk/index.css'
+            href: 'https://static.meituan.net/bs/@ss/mtd-vue/latest/lib/theme2/index.css'
         }
     });
 

@@ -1,5 +1,6 @@
 const { readFileSync, writeFileSync } = require('fs');
 const { resolve } = require('path');
+const ejs = require('ejs');
 const less = require('less');
 const CleanCSS = require('clean-css');
 
@@ -8,6 +9,8 @@ const resolvePath = (p = '') => {
 };
 
 const OriginalTemplate = readFileSync(resolvePath('src/index.vue')).toString();
+
+const ejsText = readFileSync(resolvePath('lib/index.ejs')).toString();
 
 const getInnerHtml = (tagName = 'template') => {
     const TagReg = new RegExp(`<${tagName}\\s*.*>(\\s|\\S)*<\/${tagName}>`);
@@ -31,4 +34,7 @@ less.render(lessText, (e, cssResult) => {
     writeFileToLib('template.html', templateText);
     writeFileToLib('script.js', scriptText);
     writeFileToLib('style.css', styleText);
+
+    const content = ejs.render(ejsText, { templateText });
+    writeFileSync('docs/index.html', content);
 });
