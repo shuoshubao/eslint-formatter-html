@@ -7,4 +7,5 @@ package-lock.json
 
 /bin
 /docs
-/render.js
+/index.html
+/prettier.config.js

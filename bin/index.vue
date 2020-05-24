@@ -119,8 +119,11 @@
 
 <script>
 const { get, sortBy, sum } = _;
+
 const { EslintResults = [], RulesMeta = [] } = window;
+
 Vue.use(MTD);
+
 new Vue({
     el: '#app',
     data: {

@@ -20,12 +20,20 @@ const getInnerHtml = (tagName = 'template') => {
         .join('\n');
 };
 
+const writeFileToLib = (fileName = '', content = '') => {
+    writeFileSync(resolvePath(`lib/${fileName}`), `${content}\n`);
+};
+
 const templateText = getInnerHtml('template');
 const scriptText = getInnerHtml('script');
 const lessText = getInnerHtml('style');
 
 less.render(lessText, (e, cssResult) => {
     const styleText = new CleanCSS({}).minify(cssResult.css).styles;
+
+    writeFileToLib('template.html', templateText);
+    writeFileToLib('script.js', scriptText);
+    writeFileToLib('style.css', styleText);
 
     const content = ejs.render(ejsText, { templateText, scriptText, styleText });
     writeFileSync('index.html', content);

@@ -29,7 +29,7 @@ const getFileContent = fileName => {
     return readFileSync(resolve(__dirname, 'lib', fileName)).toString();
 };
 
-module.exports = function(results, data) {
+module.exports = (results, data) => {
     const { rulesMeta = {} } = data;
 
     formatEslintResults(results);
