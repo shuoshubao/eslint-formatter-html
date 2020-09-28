@@ -155,7 +155,13 @@ new Vue({
             });
         },
         getMeta(ruleId = '', key = '') {
-            return get(RulesMeta[ruleId], key, '');
+            const url = get(RulesMeta[ruleId], key, '');
+            // sonar
+            if (!url && ruleId.startsWith('sonar')) {
+                const sonarRuleId = ruleId.split('/')[1];
+                return `https://github.com/SonarSource/eslint-plugin-sonarjs/blob/master/docs/rules/${sonarRuleId}.md`
+            }
+            return url;
         },
         getRankMessages() {
             const Messages = [...EslintResults].map(v => v.messages).flat();
