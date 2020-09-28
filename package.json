@@ -16,7 +16,8 @@
     "shuoshubao"
   ],
   "scripts": {
-    "skeleton": "node bin/skeleton"
+    "build": "node bin/skeleton",
+    "prepublishOnly": "npm run build"
   },
   "dependencies": {
     "@nbfe/js2html": "^1.1.2",
