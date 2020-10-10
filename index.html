@@ -96,7 +96,7 @@
                     v-show="item.messages.length"
                     :data="item.messages"
                     :show-header="false"
-                    style="width: 100%"
+                    style="width: 100%;"
                     size="small"
                 >
                     <mtd-table-column width="70">
@@ -135,7 +135,7 @@
         <script src="docs/EslintResults.js"></script>
         <script src="docs/RulesMeta.js"></script>
         <script>
-            const { get, sortBy, sum } = _;
+            const { get, sortBy, sum, isString } = _;
 
 const { EslintResults = [], RulesMeta = [] } = window;
 
@@ -174,9 +174,9 @@ new Vue({
         getMeta(ruleId = '', key = '') {
             const url = get(RulesMeta[ruleId], key, '');
             // sonar
-            if (!url && ruleId.startsWith('sonar')) {
+            if (!url && isString(ruleId) && ruleId.startsWith('sonar')) {
                 const sonarRuleId = ruleId.split('/')[1];
-                return `https://github.com/SonarSource/eslint-plugin-sonarjs/blob/master/docs/rules/${sonarRuleId}.md`
+                return `https://github.com/SonarSource/eslint-plugin-sonarjs/blob/master/docs/rules/${sonarRuleId}.md`;
             }
             return url;
         },
@@ -275,11 +275,22 @@ new Vue({
         }).length;
 
         Object.assign(this.analysis, {
-            errorWarningCount: `${errorCount + warningCount}/(${fixableCount}<span style="font-size: 12px;">🔧</span>)`,
+            errorWarningCount: [
+                errorCount + warningCount,
+                '/(',
+                fixableCount,
+                '<span style="font-size: 12px;">🔧</span>)'
+            ].join(''),
             errorCount,
             warningCount,
-            fileCount: `${fileCount} (<span class="color-danger">${fileCount -
-                successFileCount}</span>/<span class="color-success">${successFileCount}</span>)`
+            fileCount: [
+                fileCount,
+                '(<span class="color-danger">',
+                fileCount - successFileCount,
+                '</span>/<span class="color-success">',
+                successFileCount,
+                '</span>)'
+            ].join('')
         });
 
         this.handleChangeSort();
