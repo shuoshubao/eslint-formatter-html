@@ -53,7 +53,7 @@ module.exports = (results, data) => {
             { src: 'https://static.meituan.net/bs/@ss/mtd-vue/0.3.5/lib/index.js' },
             { src: 'https://static.meituan.net/bs/lodash/4.17.15/lodash.min.js' },
             {
-                text: `window.EslintResults = ${JSON.stringify(results)}`
+                text: `window.EslintResults = ${JSON.stringify(results)};`
             },
             {
                 text: `window.RulesMeta = ${JSON.stringify(rulesMeta)};`
