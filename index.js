@@ -1,7 +1,7 @@
 const { readFileSync } = require('fs');
 const { relative, resolve } = require('path');
 const stripAnsi = require('strip-ansi');
-const getDocText = require('@nbfe/js2html');
+const { gernerateDocument } = require('@nbfe/js2html');
 
 const rootPath = process.cwd();
 
@@ -34,7 +34,7 @@ module.exports = (results, data) => {
 
     formatEslintResults(results);
 
-    return getDocText({
+    return gernerateDocument({
         title: 'EslintReport',
         link: [
             {
