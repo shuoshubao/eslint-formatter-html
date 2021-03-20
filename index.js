@@ -2,6 +2,12 @@ const { readFileSync } = require('fs');
 const { relative, resolve } = require('path');
 const stripAnsi = require('strip-ansi');
 const { generateDocument } = require('@nbfe/js2html');
+const { name: pkgName, version: pkgVersion } = require('./package');
+
+const getCdnUrl = (filePath = '') => {
+    const source = [pkgName, pkgVersion].join('@');
+    return ['https://static.meituan.net/bs/', filePath, '?source=', source].join('');
+};
 
 const rootPath = process.cwd();
 
@@ -35,7 +41,7 @@ module.exports = (results, data) => {
     formatEslintResults(results);
 
     return generateDocument({
-        title: 'EslintReport',
+        title: ['EslintReport', pkgVersion].join('@'),
         link: [
             {
                 rel: 'icon',
@@ -43,15 +49,15 @@ module.exports = (results, data) => {
             }
         ],
         style: [
-            'https://static.meituan.net/bs/@ss/mtd-vue/0.3.5/lib/theme2/index.css',
+            getCdnUrl('@ss/mtd-vue/0.3.5/lib/theme2/index.css'),
             {
                 text: getFileContent('style.css')
             }
         ],
         script: [
-            { src: 'https://static.meituan.net/bs/vue/2.6.11/vue.min.js' },
-            { src: 'https://static.meituan.net/bs/@ss/mtd-vue/0.3.5/lib/index.js' },
-            { src: 'https://static.meituan.net/bs/lodash/4.17.15/lodash.min.js' },
+            { src: getCdnUrl('vue/2.6.11/vue.min.js') },
+            { src: getCdnUrl('@ss/mtd-vue/0.3.5/lib/index.js') },
+            { src: getCdnUrl('lodash/4.17.15/lodash.min.js') },
             {
                 text: `window.EslintResults = ${JSON.stringify(results)};`
             },

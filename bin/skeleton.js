@@ -4,6 +4,12 @@ const { generateDocument } = require('@nbfe/js2html');
 const less = require('less');
 const CleanCSS = require('clean-css');
 const mkdirp = require('mkdirp');
+const { name: pkgName, version: pkgVersion } = require('../package');
+
+const getCdnUrl = (filePath = '') => {
+    const source = [pkgName, pkgVersion].join('@');
+    return ['https://static.meituan.net/bs/', filePath, '?source=', source].join('');
+};
 
 const resolvePath = (p = '') => {
     return resolve(__dirname, '..', p);
@@ -13,10 +19,7 @@ const OriginalTemplate = readFileSync(resolvePath('bin/index.vue')).toString();
 
 const getInnerHtml = (tagName = 'template') => {
     const TagReg = new RegExp(`<${tagName}\\s*.*>(\\s|\\S)*<\/${tagName}>`);
-    return OriginalTemplate.match(TagReg)[0]
-        .split('\n')
-        .slice(1, -1)
-        .join('\n');
+    return OriginalTemplate.match(TagReg)[0].split('\n').slice(1, -1).join('\n');
 };
 
 mkdirp.sync('lib');
@@ -37,7 +40,7 @@ less.render(lessText, (e, cssResult) => {
     writeFileToLib('style.css', styleText);
 
     const content = generateDocument({
-        title: 'EslintReport',
+        title: ['EslintReport', pkgVersion].join('@'),
         link: [
             {
                 rel: 'icon',
@@ -45,15 +48,15 @@ less.render(lessText, (e, cssResult) => {
             }
         ],
         style: [
-            'https://static.meituan.net/bs/@ss/mtd-vue/0.3.5/lib/theme2/index.css',
+            getCdnUrl('@ss/mtd-vue/0.3.5/lib/theme2/index.css'),
             {
                 text: styleText
             }
         ],
         script: [
-            { src: 'https://static.meituan.net/bs/vue/2.6.11/dist/vue.js' },
-            { src: 'https://static.meituan.net/bs/@ss/mtd-vue/0.3.5/lib/index.js' },
-            { src: 'https://static.meituan.net/bs/lodash/4.17.15/lodash.min.js' },
+            { src: getCdnUrl('vue/2.6.11/vue.min.js') },
+            { src: getCdnUrl('@ss/mtd-vue/0.3.5/lib/index.js') },
+            { src: getCdnUrl('lodash/4.17.15/lodash.min.js') },
             {
                 src: 'docs/EslintResults.js'
             },
@@ -65,6 +68,6 @@ less.render(lessText, (e, cssResult) => {
             }
         ],
         bodyHtml: [templateText]
-    })
+    });
     writeFileSync('index.html', content);
 });
