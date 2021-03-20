@@ -20,7 +20,7 @@
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
-    "@nbfe/js2html": "^1.1.4",
+    "@nbfe/js2html": "^1.1.6",
     "strip-ansi": "^5.2.0"
   },
   "devDependencies": {

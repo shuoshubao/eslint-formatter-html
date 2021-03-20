@@ -1,6 +1,6 @@
 const { readFileSync, writeFileSync } = require('fs');
 const { resolve } = require('path');
-const { gernerateDocument } = require('@nbfe/js2html');
+const { generateDocument } = require('@nbfe/js2html');
 const less = require('less');
 const CleanCSS = require('clean-css');
 const mkdirp = require('mkdirp');
@@ -36,7 +36,7 @@ less.render(lessText, (e, cssResult) => {
     writeFileToLib('script.js', scriptText);
     writeFileToLib('style.css', styleText);
 
-    const content = gernerateDocument({
+    const content = generateDocument({
         title: 'EslintReport',
         link: [
             {
