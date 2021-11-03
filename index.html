@@ -1,4 +1,4 @@
-<!DOCTYPE html><html><head><title>EslintReport@2.0.7</title><meta charset="utf-8"><meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no"><link rel="icon" href="https://eslint.org/assets/img/favicon.512x512.png"><link rel="stylesheet" href="https://static.meituan.net/bs/@ss/mtd-vue/0.3.5/lib/theme2/index.css?source=eslint-formatter-html@2.0.7"><style>body,html{margin:0}#app{padding:10px}a,a:hover{text-decoration:none}.eslint-results{margin-top:10px}.mtd-card-body,.mtd-card-title{padding:10px}.box-card{border:0;border-radius:0}.box-card .mtd-card-title{padding:5px 3px;user-select:none}.box-card .mtd-card-title .filePath{padding-left:20px}.box-card .mtd-card-title .mtdicon{cursor:pointer}.box-card .mtd-card-title .error-warning-count{float:right}.box-card .mtd-card-title .mtdicon-check,.box-card .mtd-card-title .mtdicon-down,.box-card .mtd-card-title .mtdicon-right{display:none}.box-card .mtd-card-body{padding:0}.box-card.is-success .mtdicon-check{display:inline}.box-card:not(.is-success).open .mtdicon-down{display:inline}.box-card:not(.is-success).close .mtdicon-right{display:inline}.box-card.is-success .mtd-card-title{color:#67c23a;background:#f0f9eb;border-color:#c2e7b0;cursor:default}.box-card.is-warning .mtd-card-title{color:#e6a23c;background:#fdf6ec;border-color:#f5dab1}.box-card.is-error .mtd-card-title{background-color:#fef0f0;color:#f56c6c;border-color:#fbc4c4}.box-card.close .mtd-card-body{display:none}.mtd-table td{padding:0}.mtd-table-cell{padding:5px 10px;line-height:20px}.mtd-button--text{user-select:text}.code-line{cursor:pointer}.color-success{color:#67c23a}.color-danger{color:#f56c6c}.color-warning{color:#e6a23c}</style></head><body>    <div id="app" style="display: none;">
+<!DOCTYPE html><html><head><title>EslintReport@2.0.7</title><meta charset="utf-8"><meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no"><link rel="icon" href="https://eslint.org/assets/img/favicon.512x512.png"><link rel="stylesheet" href="https://static.meituan.net/bs/@ss/mtd-vue/0.3.5/lib/theme2/index.css?source=eslint-formatter-html@2.0.7"><style>body,html{margin:0}#app{padding:10px}a,a:hover{text-decoration:none}.eslint-results{margin-top:10px}.mtd-card-body,.mtd-card-title{padding:10px}.box-card{border:0;border-radius:0}.box-card .mtd-card-title{padding:5px 3px;user-select:none}.box-card .mtd-card-title .filePath{padding-left:20px}.box-card .mtd-card-title .mtdicon{cursor:pointer}.box-card .mtd-card-title .error-warning-count{float:right}.box-card .mtd-card-title .mtdicon-check,.box-card .mtd-card-title .mtdicon-down,.box-card .mtd-card-title .mtdicon-right{display:none}.box-card .mtd-card-body{padding:0}.box-card.is-success .mtdicon-check{display:inline}.box-card:not(.is-success).open .mtdicon-down{display:inline}.box-card:not(.is-success).close .mtdicon-right{display:inline}.box-card.is-success .mtd-card-title{color:#67c23a;background:#f0f9eb;border-color:#c2e7b0;cursor:default}.box-card.is-warning .mtd-card-title{color:#e6a23c;background:#fdf6ec;border-color:#f5dab1}.box-card.is-error .mtd-card-title{background-color:#fef0f0;color:#f56c6c;border-color:#fbc4c4}.box-card.close .mtd-card-body{display:none}.mtd-table td{padding:0}.mtd-table-cell{padding:5px 10px;line-height:20px}.mtd-button--text{user-select:text}.code-line{cursor:pointer}.color-success{color:#67c23a}.color-danger{color:#f56c6c}.color-warning{color:#e6a23c}.row_class_hide{display:none}</style></head><body>    <div id="app" style="display: none;">
         <mtd-card class="eslint-analysis" title="Eslint统计">
             <mtd-row style="padding-bottom: 10px;" v-if="analysis.errorCount + analysis.warningCount">
                 <mtd-col :span="4" v-for="(item, index) in analysisList" :key="index">
@@ -11,7 +11,15 @@
             </mtd-row>
             <mtd-row v-if="!!RankMessages.length">
                 <mtd-col>
-                    <mtd-table :data="RankMessages" style="width: 100%;" size="small" border>
+                    <mtd-table
+                        :data="RankMessages"
+                        style="width: 100%;"
+                        size="small"
+                        border
+                        ref="RankMessages"
+                        @selection-change="handleSelectionChange"
+                    >
+                        <mtd-table-column label="显示" width="50" type="selection"></mtd-table-column>
                         <mtd-table-column label="rank" width="60">
                             <template slot-scope="scope">
                                 <span :class="{ 'color-danger': scope.$index < 5 }">{{ scope.$index + 1 }}</span>
@@ -84,6 +92,11 @@
                     :show-header="false"
                     style="width: 100%;"
                     size="small"
+                    :row-class="
+                        ({ row, rowIndex }) => {
+                            return ['row', 'class', selectedRowKeys.includes(row.ruleId) ? 'show' : 'hide'].join('_');
+                        }
+                    "
                 >
                     <mtd-table-column width="70">
                         <template slot-scope="scope">
@@ -124,6 +137,7 @@ new Vue({
     data: {
         openAll: true,
         sortModel: 1,
+        selectedRowKeys: [], // 选中(显示)的规则
         analysis: {
             errorCount: '',
             warningCount: '',
@@ -159,7 +173,7 @@ new Vue({
             return url;
         },
         getRankMessages() {
-            const Messages = [...EslintResults].map(v => v.messages).flat();
+            const Messages = _.flatten([...EslintResults].map(v => v.messages));
 
             const ruleIdList = [...new Set(Messages.map(v => v.ruleId))];
 
@@ -184,6 +198,9 @@ new Vue({
             });
 
             this.RankMessages = sortBy(RankMessages, ['count']).reverse();
+        },
+        handleSelectionChange(val) {
+            this.selectedRowKeys = _.map(val, 'ruleId');
         },
         handleOpenItem(index) {
             const { close, errorCount, warningCount } = this.tableData[index];
@@ -273,5 +290,11 @@ new Vue({
 
         this.handleChangeSort();
         this.getRankMessages();
+        this.$nextTick(() => {
+            this.RankMessages.forEach(v => {
+                this.$refs.RankMessages.toggleRowSelection(v, true);
+            });
+            this.selectedRowKeys = _.map(this.RankMessages, 'ruleId');
+        });
     }
 });</script></body></html>

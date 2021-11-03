@@ -12,7 +12,15 @@
             </mtd-row>
             <mtd-row v-if="!!RankMessages.length">
                 <mtd-col>
-                    <mtd-table :data="RankMessages" style="width: 100%;" size="small" border>
+                    <mtd-table
+                        :data="RankMessages"
+                        style="width: 100%;"
+                        size="small"
+                        border
+                        ref="RankMessages"
+                        @selection-change="handleSelectionChange"
+                    >
+                        <mtd-table-column label="显示" width="50" type="selection"></mtd-table-column>
                         <mtd-table-column label="rank" width="60">
                             <template slot-scope="scope">
                                 <span :class="{ 'color-danger': scope.$index < 5 }">{{ scope.$index + 1 }}</span>
@@ -85,6 +93,11 @@
                     :show-header="false"
                     style="width: 100%;"
                     size="small"
+                    :row-class="
+                        ({ row, rowIndex }) => {
+                            return ['row', 'class', selectedRowKeys.includes(row.ruleId) ? 'show' : 'hide'].join('_');
+                        }
+                    "
                 >
                     <mtd-table-column width="70">
                         <template slot-scope="scope">
@@ -129,6 +142,7 @@ new Vue({
     data: {
         openAll: true,
         sortModel: 1,
+        selectedRowKeys: [], // 选中(显示)的规则
         analysis: {
             errorCount: '',
             warningCount: '',
@@ -164,7 +178,7 @@ new Vue({
             return url;
         },
         getRankMessages() {
-            const Messages = [...EslintResults].map(v => v.messages).flat();
+            const Messages = _.flatten([...EslintResults].map(v => v.messages));
 
             const ruleIdList = [...new Set(Messages.map(v => v.ruleId))];
 
@@ -189,6 +203,9 @@ new Vue({
             });
 
             this.RankMessages = sortBy(RankMessages, ['count']).reverse();
+        },
+        handleSelectionChange(val) {
+            this.selectedRowKeys = _.map(val, 'ruleId');
         },
         handleOpenItem(index) {
             const { close, errorCount, warningCount } = this.tableData[index];
@@ -278,6 +295,12 @@ new Vue({
 
         this.handleChangeSort();
         this.getRankMessages();
+        this.$nextTick(() => {
+            this.RankMessages.forEach(v => {
+                this.$refs.RankMessages.toggleRowSelection(v, true);
+            });
+            this.selectedRowKeys = _.map(this.RankMessages, 'ruleId');
+        });
     }
 });
 </script>
@@ -385,5 +408,8 @@ a:hover {
     &-warning {
         color: #e6a23c;
     }
+}
+.row_class_hide {
+    display: none;
 }
 </style>
