@@ -16,17 +16,19 @@
     "shuoshubao"
   ],
   "scripts": {
+    "dev": "npx nodemon bin/skeleton.js --watch bin/index.vue",
     "build": "node bin/skeleton",
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
-    "@nbfe/js2html": "^1.1.6",
+    "@nbfe/js2html": "^1.1.7",
     "strip-ansi": "^5.2.0"
   },
   "devDependencies": {
     "clean-css": "^4.2.3",
     "less": "^3.13.1",
     "lodash": "^4.17.15",
-    "mkdirp": "^1.0.4"
+    "mkdirp": "^1.0.4",
+    "nodemon": "^2.0.14"
   }
 }
