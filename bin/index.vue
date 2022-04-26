@@ -1,6 +1,6 @@
 <template>
     <div id="app" style="display: none;">
-        <mtd-card class="eslint-analysis" title="Eslint统计">
+        <mtd-card class="eslint-analysis" :title="`Eslint统计 (${window.CreateTime})`">
             <mtd-row style="padding-bottom: 10px;" v-if="analysis.errorCount + analysis.warningCount">
                 <mtd-col :span="4" v-for="(item, index) in analysisList" :key="index">
                     <span class="label">{{ item.label }}:</span>
@@ -44,12 +44,12 @@
                 <span style="float: left;">Eslint报告</span>
                 <span style="float: left; margin-left: 50px;">
                     <span style="margin-right: : 10px;">排序:</span>
-                    <mtd-radio-group v-model="sortModel" @change="handleChangeSort" size="small">
+                    <mtd-radio-group v-model="sortModel" @change="handleChangeSort">
                         <mtd-radio-button :value="1">错误数</mtd-radio-button>
                         <mtd-radio-button :value="2">文件路径</mtd-radio-button>
                     </mtd-radio-group>
                 </span>
-                <mtd-button @click="handleOpenCloseAll(openAll)" type="primary" size="small" style="float: right;">
+                <mtd-button @click="handleOpenCloseAll(openAll)" type="primary" style="float: right;">
                     {{ openAll ? '全部折叠' : '全部展开' }}
                 </mtd-button>
             </div>
@@ -65,7 +65,7 @@
                 ]"
                 :body-style="{ padding: 0 }"
                 shadow="never"
-                v-for="(item, index) in tableData"
+                v-for="(item, index) in tableData.filter(v => v.errorCount + v.warningCount !== 0)"
                 :key="index"
             >
                 <div slot="title" @click="() => handleOpenItem(index)">

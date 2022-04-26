@@ -1,6 +1,7 @@
 const { readFileSync, writeFileSync } = require('fs');
 const { resolve } = require('path');
 const { generateDocument } = require('@nbfe/js2html');
+const { formatTime } = require('@nbfe/tools');
 const less = require('less');
 const CleanCSS = require('clean-css');
 const mkdirp = require('mkdirp');
@@ -54,9 +55,18 @@ less.render(lessText, (e, cssResult) => {
             }
         ],
         script: [
-            { src: getCdnUrl('vue/2.6.11/vue.min.js') },
-            { src: getCdnUrl('@ss/mtd-vue/0.3.5/lib/index.js') },
-            { src: getCdnUrl('lodash/4.17.15/lodash.min.js') },
+            {
+                src: getCdnUrl('vue/2.6.11/vue.min.js')
+            },
+            {
+                src: getCdnUrl('@ss/mtd-vue/0.3.5/lib/index.js')
+            },
+            {
+                src: getCdnUrl('lodash/4.17.15/lodash.min.js')
+            },
+            {
+                text: `window.CreateTime = '${formatTime(Date.now(), 'YYYY-MM-DD HH:mm:ss')}';`
+            },
             {
                 src: 'docs/EslintResults.js'
             },

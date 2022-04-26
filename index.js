@@ -2,6 +2,7 @@ const { readFileSync } = require('fs');
 const { relative, resolve } = require('path');
 const stripAnsi = require('strip-ansi');
 const { generateDocument } = require('@nbfe/js2html');
+const { formatTime } = require('@nbfe/tools');
 const { name: pkgName, version: pkgVersion } = require('./package');
 
 const getCdnUrl = (filePath = '') => {
@@ -35,8 +36,8 @@ const getFileContent = fileName => {
     return readFileSync(resolve(__dirname, 'lib', fileName)).toString();
 };
 
-module.exports = (results, data) => {
-    const { rulesMeta = {} } = data;
+module.exports = (results, context) => {
+    const { rulesMeta = {} } = context;
 
     formatEslintResults(results);
 
@@ -55,9 +56,18 @@ module.exports = (results, data) => {
             }
         ],
         script: [
-            { src: getCdnUrl('vue/2.6.11/vue.min.js') },
-            { src: getCdnUrl('@ss/mtd-vue/0.3.5/lib/index.js') },
-            { src: getCdnUrl('lodash/4.17.15/lodash.min.js') },
+            {
+                src: getCdnUrl('vue/2.6.11/vue.min.js')
+            },
+            {
+                src: getCdnUrl('@ss/mtd-vue/0.3.5/lib/index.js')
+            },
+            {
+                src: getCdnUrl('lodash/4.17.15/lodash.min.js')
+            },
+            {
+                text: `window.CreateTime = '${formatTime(Date.now(), 'YYYY-MM-DD HH:mm:ss')}';`
+            },
             {
                 text: `window.EslintResults = ${JSON.stringify(results)};`
             },
