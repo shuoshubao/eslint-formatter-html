@@ -2,7 +2,11 @@
   "name": "eslint-formatter-html",
   "version": "2.1.1",
   "description": "eslint-formatter-html",
-  "main": "index.js",
+  "files": [
+    "dist",
+    "index.js",
+    "index.html"
+  ],
   "repository": {
     "url": "https://github.com/shuoshubao/eslint-formatter-html.git",
     "type": "git"
@@ -12,24 +16,24 @@
   "keywords": [
     "eslint",
     "eslint-formatter",
-    "eslint-formatter-html",
-    "shuoshubao"
+    "eslint-formatter-html"
   ],
   "scripts": {
-    "dev": "npx nodemon bin/skeleton.js --watch bin/index.vue",
-    "build": "node bin/skeleton",
+    "start:css": "sass lib/index.scss dist/index.css -w --no-source-map",
+    "build:css": "sass lib/index.scss dist/index.css --no-source-map --style=compressed",
+    "start:js": "esbuild lib/index.js --outfile=dist/index.js --loader:.js=jsx --bundle --watch",
+    "build:js": "esbuild lib/index.js --outfile=dist/index.js --loader:.js=jsx --bundle --minify",
+    "start": "npm run start:css & npm run start:js",
+    "build": "npm run build:css && npm run build:js",
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
-    "@nbfe/js2html": "^1.1.7",
-    "@nbfe/tools": "^0.2.14",
+    "lodash": "^4.17.21",
+    "pako": "^2.1.0",
     "strip-ansi": "^5.2.0"
   },
   "devDependencies": {
-    "clean-css": "^5.3.0",
-    "less": "^4.1.2",
-    "lodash": "^4.17.21",
-    "mkdirp": "^1.0.4",
-    "nodemon": "^2.0.15"
+    "esbuild": "^0.15.16",
+    "sass": "^1.56.1"
   }
 }

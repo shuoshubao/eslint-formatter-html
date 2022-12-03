@@ -1,0 +1,75 @@
+body .ant-tag {
+  margin: 0;
+}
+body .ant-card .ant-card-body {
+  padding: 0 !important;
+}
+body .ant-table pre {
+  margin: 0;
+  line-height: 18px;
+  width: calc(100vw - 48px - 70px - 80px - 300px - 16px);
+}
+body .ant-collapse .ant-collapse-header {
+  padding: 8px !important;
+}
+body .ant-collapse .ant-collapse-content-box {
+  padding: 0 !important;
+}
+body .ant-list .ant-list-item {
+  padding: 8px;
+}
+body .success-file-path .ant-col {
+  padding: 8px 12px;
+  line-height: 20px;
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
+}
+body .ant-card-head-title > *,
+body .ant-collapse-header-text > *,
+body .ant-collapse-extra > * {
+  display: inline;
+}
+body .ant-card-head-title > *:not(:first-child),
+body .ant-collapse-header-text > *:not(:first-child),
+body .ant-collapse-extra > *:not(:first-child) {
+  margin-left: 8px;
+}
+body .ant-back-top {
+  right: 50px;
+}
+body .ant-back-top .back-top-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  font-size: 24px;
+  text-align: center;
+  border-radius: 20px;
+  transition: all 0.3s;
+  color: #fff;
+}
+
+#app > div > * {
+  margin-top: 10px;
+}
+
+body[data-theme=light] .success-file-path .ant-col {
+  border-bottom-color: rgba(0, 0, 0, 0.06);
+}
+body[data-theme=light] .back-top-content {
+  background-color: rgba(0, 0, 0, 0.8509803922);
+}
+body[data-theme=light] .back-top-content:hover {
+  background-color: rgba(0, 0, 0, 0.8509803922);
+}
+
+body[data-theme=dark] .success-file-path .ant-col {
+  border-bottom-color: #303030;
+}
+body[data-theme=dark] .back-top-content {
+  background-color: rgba(255, 255, 255, 0.45);
+}
+body[data-theme=dark] .back-top-content:hover {
+  background-color: rgba(255, 255, 255, 0.85);
+}
