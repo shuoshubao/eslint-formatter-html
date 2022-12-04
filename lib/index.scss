@@ -1,3 +1,8 @@
+html,
+body {
+  height: 100%;
+}
+
 body {
   .ant-tag {
     margin: 0;
@@ -67,6 +72,7 @@ body {
 }
 
 body[data-theme='light'] {
+  background-color: #fff;
   .success-file-path .ant-col {
     border-bottom-color: rgba(0, 0, 0, 0.06);
   }
@@ -79,6 +85,7 @@ body[data-theme='light'] {
 }
 
 body[data-theme='dark'] {
+  background-color: #000;
   .success-file-path .ant-col {
     border-bottom-color: #303030;
   }
