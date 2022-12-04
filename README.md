@@ -4,7 +4,11 @@ A nice and more functional eslint reporter
 
 # Example output
 
-https://shuoshubao.github.io/eslint-formatter-html
+- https://shuoshubao.github.io/eslint-formatter-html
+- https://shuoshubao.github.io/eslint-formatter-html/demo1
+- https://shuoshubao.github.io/eslint-formatter-html/demo2
+- https://shuoshubao.github.io/eslint-formatter-html/demo3
+- https://shuoshubao.github.io/eslint-formatter-html/demo4
 
 # Install
 
