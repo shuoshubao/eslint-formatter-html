@@ -28,7 +28,6 @@
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
-    "lodash": "^4.17.21",
     "pako": "^2.1.0",
     "strip-ansi": "^5.2.0"
   },

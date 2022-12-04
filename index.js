@@ -1,29 +1,31 @@
 const { readFileSync } = require('fs')
 const { relative, resolve } = require('path')
-const { map, uniq, flatten } = require('lodash')
 const { deflateRaw } = require('pako')
 const stripAnsi = require('strip-ansi')
 const { version: pkgVersion } = require('./package')
 
-/**
- * filePath => relative path
- * source => remove
- * output => remove
- */
-const formatEslintResults = (results, cwd) => {
+const formatEslintData = (results, context) => {
+  const { cwd, rulesMeta } = context
+  const EslintRulesMeta = {}
   results.forEach(v => {
     const { filePath } = v
     v.filePath = relative(cwd, filePath)
     v.messages = v.messages.map(v2 => {
+      const { ruleId, message } = v2
+      if (!(ruleId in EslintRulesMeta)) {
+        EslintRulesMeta[ruleId] = rulesMeta[ruleId]
+        delete EslintRulesMeta[ruleId].schema
+      }
       return {
         ...v2,
-        message: stripAnsi(v2.message)
+        message: stripAnsi(message)
       }
     })
     delete v.source
     delete v.output
+    delete v.usedDeprecatedRules
   })
-  return results
+  return { EslintResults: results, EslintRulesMeta }
 }
 
 const getFileContent = fileName => {
@@ -35,18 +37,9 @@ const deflateData = data => {
 }
 
 module.exports = (results, context) => {
-  const { cwd, rulesMeta } = context
-  const EslintRulesMeta = uniq(map(flatten(map(results, 'messages')), 'ruleId'))
-    .filter(Boolean)
-    .reduce((prev, cur) => {
-      const meta = rulesMeta[cur]
-      if (meta) {
-        prev[cur] = meta
-      }
-      return prev
-    }, {})
+  const { cwd } = context
 
-  const EslintResults = formatEslintResults(results, cwd)
+  const { EslintResults, EslintRulesMeta } = formatEslintData(results, context)
 
   return getFileContent('./index.html')
     .replace('dist/index.css', `https://unpkg.com/eslint-formatter-html@${pkgVersion}/dist/index.css`)
