@@ -49,8 +49,8 @@ module.exports = (results, context) => {
     )
     .replace(
       '<script src="docs/EslintRulesMeta.js"></script>',
-      `<script>window.EslintRulesMeta = "${deflateData(EslintRulesMeta)}";</script>`
+      `<script>window.EslintRulesMeta = '${deflateData(EslintRulesMeta)}';</script>`
     )
-    .replace('</div>', `</div><script>window.EslintCwd = "${cwd}";window.EslintCreateTime = ${Date.now()}</script>`)
+    .replace('</div>', `</div><script>window.EslintCwd = '${cwd}'; window.EslintCreateTime = ${Date.now()};</script>`)
     .replace('dist/index.js', `https://unpkg.com/eslint-formatter-html@${pkgVersion}/dist/index.js`)
 }

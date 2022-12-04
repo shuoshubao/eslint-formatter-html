@@ -1,8 +1,8 @@
 # eslint-formatter-html
 
-A nice and more functional eslint reporter
+A enhanced ESLint formatter
 
-# Example output
+# Examples
 
 - https://shuoshubao.github.io/eslint-formatter-html
 - https://shuoshubao.github.io/eslint-formatter-html/demo1
