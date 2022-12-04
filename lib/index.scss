@@ -62,7 +62,7 @@ body {
   }
 }
 
-#app > div > * {
+#app > div > *:not(:first-child) {
   margin-top: 10px;
 }
 

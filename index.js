@@ -5,17 +5,15 @@ const { deflateRaw } = require('pako')
 const stripAnsi = require('strip-ansi')
 const { version: pkgVersion } = require('./package')
 
-const rootPath = process.cwd()
-
 /**
  * filePath => relative path
  * source => remove
  * output => remove
  */
-const formatEslintResults = (results = []) => {
+const formatEslintResults = (results, cwd) => {
   results.forEach(v => {
     const { filePath } = v
-    v.filePath = relative(rootPath, filePath)
+    v.filePath = relative(cwd, filePath)
     v.messages = v.messages.map(v2 => {
       return {
         ...v2,
@@ -37,15 +35,18 @@ const deflateData = data => {
 }
 
 module.exports = (results, context) => {
-  const EslintRulesMeta = uniq(map(flatten(map(results, 'messages')), 'ruleId')).reduce((prev, cur) => {
-    const meta = context.rulesMeta[cur]
-    if (meta) {
-      prev[cur] = meta
-    }
-    return prev
-  }, {})
+  const { cwd, rulesMeta } = context
+  const EslintRulesMeta = uniq(map(flatten(map(results, 'messages')), 'ruleId'))
+    .filter(Boolean)
+    .reduce((prev, cur) => {
+      const meta = rulesMeta[cur]
+      if (meta) {
+        prev[cur] = meta
+      }
+      return prev
+    }, {})
 
-  const EslintResults = formatEslintResults(results)
+  const EslintResults = formatEslintResults(results, cwd)
 
   return getFileContent('./index.html')
     .replace('dist/index.css', `https://unpkg.com/eslint-formatter-html@${pkgVersion}/dist/index.css`)
@@ -57,6 +58,6 @@ module.exports = (results, context) => {
       '<script src="docs/EslintRulesMeta.js"></script>',
       `<script>window.EslintRulesMeta = "${deflateData(EslintRulesMeta)}";</script>`
     )
-    .replace('</div>', `</div><script>window.EslintCreateTime = ${Date.now()}</script>`)
+    .replace('</div>', `</div><script>window.EslintCwd = "${cwd}";window.EslintCreateTime = ${Date.now()}</script>`)
     .replace('dist/index.js', `https://unpkg.com/eslint-formatter-html@${pkgVersion}/dist/index.js`)
 }
