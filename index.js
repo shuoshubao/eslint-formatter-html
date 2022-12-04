@@ -12,7 +12,7 @@ const formatEslintData = (results, context) => {
     v.filePath = relative(cwd, filePath)
     v.messages = v.messages.map(v2 => {
       const { ruleId, message } = v2
-      if (!(ruleId in EslintRulesMeta)) {
+      if (ruleId && !(ruleId in EslintRulesMeta)) {
         EslintRulesMeta[ruleId] = rulesMeta[ruleId]
         delete EslintRulesMeta[ruleId].schema
       }
