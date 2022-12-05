@@ -9,6 +9,9 @@ A enhanced ESLint formatter
 - https://shuoshubao.github.io/eslint-formatter-html/demo2
 - https://shuoshubao.github.io/eslint-formatter-html/demo3
 - https://shuoshubao.github.io/eslint-formatter-html/demo4
+- https://shuoshubao.github.io/eslint-formatter-html/demo5
+- https://shuoshubao.github.io/eslint-formatter-html/demo6
+- https://shuoshubao.github.io/eslint-formatter-html/demo7
 
 # Install
 
