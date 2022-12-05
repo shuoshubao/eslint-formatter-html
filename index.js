@@ -2,7 +2,9 @@ const { readFileSync } = require('fs')
 const { relative, resolve } = require('path')
 const { deflateRaw } = require('pako')
 const stripAnsi = require('strip-ansi')
-const { version: pkgVersion } = require('./package')
+const pkg = require('./package')
+
+const { name: pkgName, version: pkgVersion } = pkg
 
 const formatEslintData = (results, context) => {
   const { cwd, rulesMeta } = context
@@ -36,21 +38,30 @@ const deflateData = data => {
   return deflateRaw(JSON.stringify(data).toString())
 }
 
+const unpkgPrefix = `https://unpkg.com/${pkgName}@${pkgVersion}`
+
 module.exports = (results, context) => {
   const { cwd } = context
 
   const { EslintResults, EslintRulesMeta } = formatEslintData(results, context)
 
   return getFileContent('./index.html')
-    .replace('dist/index.css', `https://unpkg.com/eslint-formatter-html@${pkgVersion}/dist/index.css`)
+    .replace('dist/index.css', [unpkgPrefix, `dist/index.css`].join('/'))
+    .replace('dist/index.js', [unpkgPrefix, `dist/index.js`].join('/'))
+    .replace('<script src="docs/EslintResults.js">', `<script>window.EslintResults = '${deflateData(EslintResults)}'`)
     .replace(
-      '<script src="docs/EslintResults.js"></script>',
-      `<script>window.EslintResults = "${deflateData(EslintResults)}";</script>`
+      '<script src="docs/EslintRulesMeta.js">',
+      `<script>window.EslintRulesMeta = '${deflateData(EslintRulesMeta)}'`
     )
     .replace(
-      '<script src="docs/EslintRulesMeta.js"></script>',
-      `<script>window.EslintRulesMeta = '${deflateData(EslintRulesMeta)}';</script>`
+      '<div id="app"></div>',
+      [
+        `<div id="app"></div>`,
+        '<script>',
+        `window.EslintCwd = '${cwd}';`,
+        `window.EslintCreateTime = ${Date.now()};`,
+        `window.EslintPkg = ${JSON.stringify(pkg)};`,
+        '</script>'
+      ].join('\n')
     )
-    .replace('</div>', `</div><script>window.EslintCwd = '${cwd}'; window.EslintCreateTime = ${Date.now()};</script>`)
-    .replace('dist/index.js', `https://unpkg.com/eslint-formatter-html@${pkgVersion}/dist/index.js`)
 }
