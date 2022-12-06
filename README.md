@@ -29,10 +29,9 @@ npx eslint -f html -o ESLintReport.html
 
 # Feature
 
+- The html page is built based on `react` and `antd`, and the interaction is very good
 - The file path is a relative path, very short
-- The file path can be copied
-- Code line and column numbers can be copied, and you can quickly locate the specific location of the code
-- Support ansi code display
-- The html page is built based on react and antd, and the interaction is very good
+- Both file paths and code lines and columns can be copied, that you can quickly locate the specific location of the code
+- Supports ansi code display
 - Supports dark mode and remembers your settings
 - Using [pako](https://www.npmjs.com/package/pako) compression, even if the project is large, the report file size is small
