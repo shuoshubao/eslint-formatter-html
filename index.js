@@ -26,6 +26,7 @@ const formatEslintData = (results, context) => {
     delete v.source
     delete v.output
     delete v.usedDeprecatedRules
+    delete v.suppressedMessages
   })
   return { EslintResults: results, EslintRulesMeta }
 }
