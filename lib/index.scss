@@ -32,9 +32,12 @@ body {
   .ant-card-head-title,
   .ant-card-extra,
   .ant-collapse-header-text,
-  .ant-collapse-extra {
+  .ant-collapse-extra,
+  .ant-list-footer {
     & > * {
-      display: inline;
+      &.ant-typography {
+        display: inline;
+      }
       &:not(:first-child) {
         margin-left: 8px;
       }
