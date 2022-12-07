@@ -28,7 +28,7 @@ npx eslint -f html -o ESLintReport.html
 
 > More information about formatters can be found on https://eslint.org/docs/latest/user-guide/formatters
 
-# Feature
+# Features
 
 - The html page is built based on `react` and `antd`, and the interaction is very good
 - The file path is a relative path, very short
