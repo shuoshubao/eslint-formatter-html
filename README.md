@@ -14,7 +14,7 @@ A enhanced ESLint formatter
 - https://shuoshubao.github.io/eslint-formatter-html/demo7
 - https://shuoshubao.github.io/eslint-formatter-html/demo8
 
-ESLint official example
+## ESLint official example
 
 - https://eslint.org/docs/latest/user-guide/formatters/html-formatter-example
 - https://shuoshubao.github.io/eslint-formatter-html/built-in
