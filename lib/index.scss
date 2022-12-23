@@ -1,6 +1,7 @@
 html,
 body {
   height: 100%;
+  margin: 0;
 }
 
 pre {
@@ -18,7 +19,8 @@ body {
   .ant-table {
     pre {
       line-height: 18px;
-      width: calc(100vw - 12px * 4 - 70px - 80px - 300px - 8px * 2);
+      white-space: pre-wrap;
+      word-wrap: break-word;
     }
   }
   .ant-collapse {
@@ -43,21 +45,6 @@ body {
       }
     }
   }
-  .ant-back-top {
-    right: 50px;
-    .back-top-content {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 40px;
-      height: 40px;
-      font-size: 24px;
-      text-align: center;
-      border-radius: 20px;
-      transition: all 0.3s;
-      color: #fff;
-    }
-  }
 }
 
 #app > div > *:not(:first-child) {
@@ -66,20 +53,14 @@ body {
 
 body[data-theme='light'] {
   background-color: #fff;
-  .back-top-content {
-    background-color: #000000d9;
-    &:hover {
-      background-color: #000000d9;
-    }
-  }
 }
 
 body[data-theme='dark'] {
   background-color: #000;
-  .back-top-content {
-    background-color: rgba(255, 255, 255, 0.45);
-    &:hover {
-      background-color: rgba(255, 255, 255, 0.85);
+  .ant-message {
+    color: rgba(255, 255, 255, 0.85);
+    .ant-message-notice-content {
+      background: #1f1f1f;
     }
   }
 }
