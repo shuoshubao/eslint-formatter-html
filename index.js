@@ -2,9 +2,7 @@ const { readFileSync } = require('fs')
 const { relative, resolve } = require('path')
 const { deflateRaw } = require('pako')
 const stripAnsi = require('strip-ansi')
-const pkg = require('./package')
-
-const { name: pkgName, version: pkgVersion } = pkg
+const { name, version } = require('./package')
 
 const formatEslintData = (results, context) => {
   const { cwd, rulesMeta } = context
@@ -39,7 +37,7 @@ const deflateData = data => {
   return deflateRaw(JSON.stringify(data).toString())
 }
 
-const unpkgPrefix = `https://unpkg.com/${pkgName}@${pkgVersion}`
+const unpkgPrefix = `https://unpkg.com/${name}@${version}`
 
 module.exports = (results, context) => {
   const { cwd } = context
@@ -61,7 +59,6 @@ module.exports = (results, context) => {
         '<script>',
         `window.EslintCwd = '${cwd}';`,
         `window.EslintCreateTime = ${Date.now()};`,
-        `window.EslintPkg = ${JSON.stringify(pkg)};`,
         '</script>'
       ].join('\n')
     )
