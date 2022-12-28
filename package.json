@@ -29,8 +29,8 @@
   "scripts": {
     "start:css": "sass lib/index.scss dist/index.css -w --no-source-map",
     "build:css": "sass lib/index.scss dist/index.css --no-source-map --style=compressed",
-    "start:js": "esbuild lib/index.js --outfile=dist/index.js --loader:.js=jsx --bundle --watch",
-    "build:js": "esbuild lib/index.js --outfile=dist/index.js --loader:.js=jsx --bundle --minify",
+    "start:js": "esbuild lib/index.js --outdir=dist --loader:.js=jsx --bundle --watch",
+    "build:js": "esbuild lib/index.js --outdir=dist --loader:.js=jsx --bundle --minify",
     "start": "npm run start:css & npm run start:js",
     "build": "npm run build:css && npm run build:js",
     "prepublishOnly": "npm run build"
