@@ -45,7 +45,10 @@ module.exports = (results, context) => {
   const { EslintResults, EslintRulesMeta } = formatEslintData(results, context)
 
   return getFileContent('./index.html')
-    .replace('dist/index.css', [unpkgPrefix, `dist/index.css`].join('/'))
+    .replace(
+      '<link rel="stylesheet" href="dist/index.css" />',
+      `<style>${getFileContent('./dist/index.css').trim()}</style>`
+    )
     .replace('dist/index.js', [unpkgPrefix, `dist/index.js`].join('/'))
     .replace('<script src="docs/EslintResults.js">', `<script>window.EslintResults = '${deflateData(EslintResults)}'`)
     .replace(
