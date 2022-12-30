@@ -38,6 +38,6 @@ npx eslint -f html -o ESLintReport.html
 - The html page is built based on `react` and `antd`, and the interaction is very good
 - The file path is a relative path, very short
 - Both file paths and code lines and columns can be copied, that you can quickly locate the specific location of the code
-- Supports ansi code display
-- Supports dark mode and remembers your settings
+- Supports `ansi` code display
+- Supports dark mode, depending on your Mac settings
 - Using [pako](https://www.npmjs.com/package/pako) compression, even if the project is large, the report file size is small
