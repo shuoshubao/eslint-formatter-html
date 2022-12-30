@@ -50,15 +50,3 @@ body {
 #app > div > *:not(:first-child) {
   margin-top: 10px;
 }
-
-@media (prefers-color-scheme: dark) {
-  body {
-    background-color: #000 !important;
-    .ant-message {
-      color: rgba(255, 255, 255, 0.85);
-      .ant-message-notice-content {
-        background: #1f1f1f;
-      }
-    }
-  }
-}
