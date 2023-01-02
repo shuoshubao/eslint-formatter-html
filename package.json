@@ -40,10 +40,10 @@
     "strip-ansi": "^5.2.0"
   },
   "devDependencies": {
-    "@nbfe/tools": "^0.3.0",
+    "@nbfe/tools": "^0.4.0",
     "antd": "^5.1.0",
     "esbuild": "^0.15.16",
-    "lodash": "^4.17.21",
+    "lodash-es": "^4.17.21",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "sass": "^1.56.1"
