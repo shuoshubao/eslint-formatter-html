@@ -23,6 +23,7 @@ import {
 import { CodeOutlined, DownOutlined, RightOutlined, VerticalAlignTopOutlined } from '@ant-design/icons'
 import { first, last, map, find } from 'lodash-es'
 import { isEmptyArray, formatTime } from '@nbfe/tools/dist/index-es'
+import 'antd/dist/reset.css'
 import {
   EslintCwd,
   EslintCreateTime,

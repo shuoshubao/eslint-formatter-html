@@ -1,13 +1,3 @@
-html,
-body {
-  height: 100%;
-  margin: 0;
-}
-
-pre {
-  margin: 0;
-}
-
 body {
   .ant-tag {
     margin: 0;
@@ -18,6 +8,7 @@ body {
   }
   .ant-table {
     pre {
+      margin: 0;
       line-height: 18px;
       white-space: pre-wrap;
       word-wrap: break-word;
