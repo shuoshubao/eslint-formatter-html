@@ -41,6 +41,7 @@ import {
   addListenerPrefersColorScheme,
   showPkgInfo
 } from './config'
+import './index.css'
 
 const { Text, Title } = Typography
 

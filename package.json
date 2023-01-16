@@ -27,8 +27,8 @@
     "eslint-formatter-html"
   ],
   "scripts": {
-    "start:css": "sass lib/index.scss dist/index.css -w --no-source-map",
-    "build:css": "sass lib/index.scss dist/index.css --no-source-map --style=compressed",
+    "start:css": "sass lib/index.scss lib/index.css -w --no-source-map",
+    "build:css": "sass lib/index.scss lib/index.css --no-source-map --style=compressed",
     "start:js": "esbuild lib/index.jsx --outdir=dist --bundle --watch",
     "build:js": "esbuild lib/index.jsx --outdir=dist --bundle --minify",
     "start": "npm run start:css & npm run start:js",
