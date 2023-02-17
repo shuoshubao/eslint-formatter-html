@@ -22,7 +22,7 @@ A enhanced ESLint formatter
 # Install
 
 ```sh
-npm i D eslint-formatter-html
+npm i -D eslint-formatter-html
 ```
 
 # Usage
