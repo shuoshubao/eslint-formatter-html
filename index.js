@@ -2,7 +2,6 @@ const { readFileSync } = require('fs');
 const { relative, resolve } = require('path');
 const { deflateRaw } = require('pako');
 const stripAnsi = require('strip-ansi');
-const { name } = require('./package');
 
 const formatEslintData = (results, context) => {
     const { cwd, rulesMeta } = context;
@@ -30,23 +29,19 @@ const formatEslintData = (results, context) => {
 };
 
 const getFileContent = fileName => {
-    return readFileSync(resolve(__dirname, fileName)).toString();
+    return readFileSync(resolve(__dirname, fileName), 'utf-8');
 };
 
 const deflateData = data => {
     return deflateRaw(JSON.stringify(data).toString());
 };
 
-const unpkgPrefix = `https://unpkg.com/${name}@latest`;
-
 module.exports = (results, context) => {
     const { cwd } = context;
 
     const { EslintResults, EslintRulesMeta } = formatEslintData(results, context);
 
-    return getFileContent('./index.html')
-        .replace('<link rel="stylesheet" href="dist/index.css" />', `<style>${getFileContent('./dist/index.css').trim()}</style>`)
-        .replace('dist/index.js', [unpkgPrefix, `dist/index.js`].join('/'))
+    return getFileContent('./dist/index.html')
         .replace('<script src="docs/EslintResults.js">', `<script>window.EslintResults = '${deflateData(EslintResults)}'`)
         .replace('<script src="docs/EslintRulesMeta.js">', `<script>window.EslintRulesMeta = '${deflateData(EslintRulesMeta)}'`)
         .replace(

@@ -1,12 +1,20 @@
 import { BugOutlined, EnvironmentOutlined, GithubOutlined, MailOutlined, UserOutlined } from '@ant-design/icons';
-import { copyText, isEmptyArray } from '@nbfe/tools/dist/index-es';
 import { Button, Divider, List, Space, Tooltip, Typography } from 'antd';
-import { filter, flatten, groupBy, intersection, map, sortBy, sum, uniq } from 'lodash-es';
+import { filter, flatten, groupBy, intersection, map, sortBy, sum, uniq } from 'lodash';
 import { inflateRaw } from 'pako/dist/pako_inflate.js';
 import React from 'react';
 import { author, bugs, homepage, name, version } from '../package.json';
 
 const { Text, Link } = Typography;
+
+const copyText = (text = '') => {
+    const textarea = document.createElement('textarea');
+    textarea.value = text;
+    document.body.appendChild(textarea);
+    textarea.select();
+    document.execCommand('copy');
+    document.body.removeChild(textarea);
+};
 
 const inflateData = str => {
     return JSON.parse(inflateRaw(new Uint8Array(str.split(',')), { to: 'string' }));
@@ -25,11 +33,11 @@ export const ProblematicEslintResults = EslintResults.filter(v => {
     return v.messages.length && v.fatalErrorCount === 0;
 });
 
-export const NoProblematicEslintResults = EslintResults.filter(v => isEmptyArray(v.messages));
+export const NoProblematicEslintResults = EslintResults.filter(v => v.messages.length === 0);
 
 const RankMessages = flatten(ProblematicEslintResults.map(v => v.messages));
 
-export const hasNoError = !RankMessages.some(v => v.severity === 2) && isEmptyArray(FatalErrorEslintResults);
+export const hasNoError = !RankMessages.some(v => v.severity === 2) && FatalErrorEslintResults.length === 0;
 
 export const getEslintAnalysis = () => {
     const ErrorCount = sum(

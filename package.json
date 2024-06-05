@@ -4,8 +4,7 @@
     "description": "eslint-formatter-html",
     "files": [
         "dist",
-        "index.js",
-        "index.html"
+        "index.js"
     ],
     "repository": {
         "url": "https://github.com/shuoshubao/eslint-formatter-html.git",
@@ -27,12 +26,8 @@
         "eslint-formatter-html"
     ],
     "scripts": {
-        "start:css": "sass lib/index.scss lib/index.css -w --no-source-map",
-        "build:css": "sass lib/index.scss lib/index.css --no-source-map --style=compressed",
-        "start:js": "esbuild lib/index.jsx --outdir=dist --bundle --watch",
-        "build:js": "esbuild lib/index.jsx --outdir=dist --bundle --minify",
-        "start": "npm run start:css & npm run start:js",
-        "build": "npm run build:css && npm run build:js",
+        "start": "vite",
+        "build": "vite build",
         "prepublishOnly": "npm run build"
     },
     "dependencies": {
@@ -40,12 +35,12 @@
         "strip-ansi": "^5.2.0"
     },
     "devDependencies": {
-        "@nbfe/tools": "^0.4.0",
-        "antd": "^5.1.0",
-        "esbuild": "^0.15.16",
-        "lodash-es": "^4.17.21",
+        "@vitejs/plugin-react": "^4.3.0",
+        "antd": "5.18.0",
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
-        "sass": "^1.56.1"
+        "sass": "^1.77.4",
+        "vite": "^5.2.12",
+        "vite-plugin-externals": "^0.6.2"
     }
 }

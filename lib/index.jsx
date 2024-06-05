@@ -1,5 +1,4 @@
 import { CodeOutlined, DownOutlined, RightOutlined, VerticalAlignTopOutlined } from '@ant-design/icons';
-import { formatTime, isEmptyArray } from '@nbfe/tools/dist/index-es';
 import {
     Button,
     Card,
@@ -20,7 +19,8 @@ import {
     theme
 } from 'antd';
 import 'antd/dist/reset.css';
-import { find, first, last, map } from 'lodash-es';
+import dayjs from 'dayjs';
+import { find, first, last, map } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import {
@@ -40,7 +40,7 @@ import {
     isDark,
     showPkgInfo
 } from './config';
-import './index.css';
+import './index.scss';
 
 const { Text, Title } = Typography;
 
@@ -104,7 +104,7 @@ const App = () => {
             }}
         >
             <div style={{ padding: 12, background: dark ? '#000' : '#fff' }}>
-                {!isEmptyArray(FatalErrorEslintResults) && (
+                {FatalErrorEslintResults.length !== 0 && (
                     <Card
                         title={
                             <>
@@ -145,7 +145,7 @@ const App = () => {
                         <>
                             <Title level={3}>ESLint Report</Title>
                             <Button type="primary">{last(EslintCwd.split('/'))}</Button>
-                            <Button>{formatTime(EslintCreateTime, 'YYYY-MM-DD HH:mm:ss')}</Button>
+                            <Button>{dayjs(EslintCreateTime).format('YYYY-MM-DD HH:mm:ss')}</Button>
                         </>
                     }
                     extra={
@@ -186,7 +186,7 @@ const App = () => {
                             />
                         </Space>
                     )}
-                    {!isEmptyArray(dataSourceRankMessages) && (
+                    {dataSourceRankMessages.length !== 0 && (
                         <Table
                             rowKey="ruleId"
                             rowSelection={rowSelection}
@@ -202,7 +202,7 @@ const App = () => {
                     <FloatButton.BackTop icon={<VerticalAlignTopOutlined />}></FloatButton.BackTop>
                 </Card>
 
-                {!isEmptyArray(ProblematicEslintResults) && (
+                {ProblematicEslintResults.length !== 0 && (
                     <Card
                         title={
                             <>
