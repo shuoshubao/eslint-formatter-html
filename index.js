@@ -25,6 +25,12 @@ const formatEslintData = (results, context) => {
         delete v.usedDeprecatedRules;
         delete v.suppressedMessages;
     });
+
+    try {
+        const tableFormatter = require('eslint-formatter-table');
+        console.log(tableFormatter(results, context));
+    } catch (e) {}
+
     return { EslintResults: results, EslintRulesMeta };
 };
 
