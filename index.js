@@ -26,11 +26,6 @@ const formatEslintData = (results, context) => {
         delete v.suppressedMessages;
     });
 
-    try {
-        const tableFormatter = require('eslint-formatter-table');
-        console.log(tableFormatter(results, context));
-    } catch (e) {}
-
     return { EslintResults: results, EslintRulesMeta };
 };
 
@@ -43,15 +38,27 @@ const deflateData = data => {
 };
 
 module.exports = (results, context) => {
-    const { cwd } = context;
+    try {
+        const tableFormatter = require('eslint-formatter-table');
+        console.log(tableFormatter(results, context));
+    } catch (e) {}
+
+    const { cwd: EslintCwd } = context;
+
+    const EslintCreateTime = Date.now();
 
     const { EslintResults, EslintRulesMeta } = formatEslintData(results, context);
 
-    return getFileContent('./dist/index.html')
-        .replace('<script src="docs/EslintResults.js">', `<script>window.EslintResults = '${deflateData(EslintResults)}'`)
-        .replace('<script src="docs/EslintRulesMeta.js">', `<script>window.EslintRulesMeta = '${deflateData(EslintRulesMeta)}'`)
-        .replace(
-            '<div id="app"></div>',
-            [`<div id="app"></div>`, '<script>', `window.EslintCwd = '${cwd}';`, `window.EslintCreateTime = ${Date.now()};`, '</script>'].join('\n')
-        );
+    const scriptContent = `
+        <script>
+            window.EslintCwd = '${EslintCwd}';
+            window.EslintCreateTime = ${EslintCreateTime};
+            window.EslintResults = '${deflateData(EslintResults)}';
+            window.EslintRulesMeta = '${deflateData(EslintRulesMeta)}';
+        </script>
+    `;
+
+    const template = getFileContent('./dist/index.html');
+
+    return template.replace('<script src="docs/EslintResults.js"></script>', scriptContent);
 };
