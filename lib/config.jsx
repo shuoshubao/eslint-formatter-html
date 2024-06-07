@@ -1,7 +1,6 @@
 import { BugOutlined, EnvironmentOutlined, GithubOutlined, MailOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, Divider, List, Space, Tooltip, Typography } from 'antd';
 import { filter, flatten, groupBy, intersection, map, sortBy, sum, uniq } from 'lodash';
-import { inflateRaw } from 'pako/dist/pako_inflate.js';
 import React from 'react';
 import { author, bugs, homepage, name, version } from '../package.json';
 
@@ -17,6 +16,7 @@ const copyText = (text = '') => {
 };
 
 const inflateData = str => {
+    const { inflateRaw } = window.pako;
     return JSON.parse(inflateRaw(new Uint8Array(str.split(',')), { to: 'string' }));
 };
 
