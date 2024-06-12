@@ -107,20 +107,15 @@ export const getRulesColumns = () => {
             width: 300,
             render: (value, record) => {
                 const { url, fixable } = record;
-                const btn = (
-                    <Button href={url} type="link">
+                const nodes = [
+                    <Link href={url} copyable>
                         {value}
-                    </Button>
-                );
+                    </Link>
+                ];
                 if (fixable) {
-                    return (
-                        <>
-                            {btn}
-                            <span>🔧</span>
-                        </>
-                    );
+                    nodes.push(<span style={{ marginLeft: 4 }}>🔧</span>);
                 }
-                return btn;
+                return nodes;
             }
         },
         {

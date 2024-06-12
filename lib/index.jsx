@@ -1,4 +1,4 @@
-import { CodeOutlined, DownOutlined, RightOutlined, VerticalAlignTopOutlined } from '@ant-design/icons';
+import { CodeOutlined, CopyOutlined, DownOutlined, RightOutlined, VerticalAlignTopOutlined } from '@ant-design/icons';
 import {
     Button,
     Card,
@@ -36,6 +36,7 @@ import {
     getRankMessages,
     getResultsColumns,
     getRulesColumns,
+    handleCopyText,
     hasNoError,
     isDark,
     showPkgInfo
@@ -230,6 +231,18 @@ const App = () => {
                                 >
                                     <Button style={{ width: 150 }}>{['SortBy: ', find(SortModeEnum, { key: sortMode }).label].join('')}</Button>
                                 </Dropdown>
+                                {!hasNoError && (
+                                    <Tooltip title="Copy all file paths with errors" placement="topRight">
+                                        <Button
+                                            icon={<CopyOutlined />}
+                                            onClick={() => {
+                                                const files = showEslintResults.filter(v => v.errorCount);
+                                                handleCopyText(map(files, 'filePath').join(' '), message);
+                                            }}
+                                            style={{ marginLeft: 10 }}
+                                        />
+                                    </Tooltip>
+                                )}
                                 <Tooltip title="toggle open/fold all" placement="topRight">
                                     <Button
                                         disabled={!AllFilesCount}
