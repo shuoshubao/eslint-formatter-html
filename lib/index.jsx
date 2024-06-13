@@ -1,8 +1,8 @@
 import { CodeOutlined, CopyOutlined, DownOutlined, RightOutlined, VerticalAlignTopOutlined } from '@ant-design/icons';
 import {
+    Badge,
     Button,
     Card,
-    Collapse,
     ConfigProvider,
     Dropdown,
     FloatButton,
@@ -12,7 +12,6 @@ import {
     Space,
     Statistic,
     Table,
-    Tag,
     Tooltip,
     Typography,
     message,
@@ -30,6 +29,7 @@ import {
     NoProblematicEslintResults,
     ProblematicEslintResults,
     SortModeEnum,
+    TableColumns,
     addListenerPrefersColorScheme,
     getEslintAnalysis,
     getEslintResults,
@@ -44,8 +44,6 @@ import {
 import './index.scss';
 
 const { Text, Title } = Typography;
-
-const { Panel } = Collapse;
 
 const { defaultAlgorithm, darkAlgorithm } = theme;
 
@@ -106,16 +104,7 @@ const App = () => {
         >
             <div style={{ padding: 12, background: dark ? '#000' : '#fff' }}>
                 {FatalErrorEslintResults.length !== 0 && (
-                    <Card
-                        title={
-                            <>
-                                <Title level={3} type="danger">
-                                    FatalError
-                                </Title>
-                                <Tag color="error">{FatalErrorEslintResults.length}</Tag>
-                            </>
-                        }
-                    >
+                    <Card title="FatalError" extra={<Badge color="#ff4d4f" count={FatalErrorEslintResults.length} />} hoverable>
                         <List
                             rowKey="filePath"
                             dataSource={FatalErrorEslintResults}
@@ -130,9 +119,10 @@ const App = () => {
                                                     {filePath}
                                                 </Text>
                                             }
+                                            hoverable
                                             style={{ width: '100%' }}
                                         >
-                                            <pre>{message}</pre>
+                                            <pre style={{ margin: 0 }}>{message}</pre>
                                         </Card>
                                     </List.Item>
                                 );
@@ -142,21 +132,20 @@ const App = () => {
                 )}
 
                 <Card
-                    title={
+                    title="ESLint Report"
+                    extra={
                         <>
-                            <Title level={3}>ESLint Report</Title>
-                            <Button type="primary">{last(EslintCwd.split('/'))}</Button>
+                            <Button>{last(EslintCwd.split('/'))}</Button>
                             <Button>{dayjs(EslintCreateTime).format('YYYY-MM-DD HH:mm:ss')}</Button>
+                            <Button
+                                onClick={() => {
+                                    showPkgInfo(modal, messageApi);
+                                }}
+                                icon={<CodeOutlined />}
+                            />
                         </>
                     }
-                    extra={
-                        <Button
-                            onClick={() => {
-                                showPkgInfo(modal, messageApi);
-                            }}
-                            icon={<CodeOutlined />}
-                        />
-                    }
+                    hoverable
                 >
                     {hasNoError && (
                         <div style={{ padding: 10 }}>
@@ -177,10 +166,10 @@ const App = () => {
                                 title="Files"
                                 formatter={() => {
                                     return (
-                                        <Space>
+                                        <Space size={2}>
                                             <span>{FilesCount}</span>
-                                            <Tag color="error">{FilesCount - SuccessFileCount}</Tag>
-                                            <Tag color="success">{SuccessFileCount}</Tag>
+                                            <Badge color="#ff4d4f" count={FilesCount - SuccessFileCount} />
+                                            <Badge color="#52c41a" count={SuccessFileCount} />
                                         </Space>
                                     );
                                 }}
@@ -200,27 +189,15 @@ const App = () => {
                             }}
                         />
                     )}
-                    <FloatButton.BackTop icon={<VerticalAlignTopOutlined />}></FloatButton.BackTop>
+                    <FloatButton.BackTop icon={<VerticalAlignTopOutlined />} />
                 </Card>
 
                 {ProblematicEslintResults.length !== 0 && (
                     <Card
-                        title={
-                            <>
-                                <Title level={3} type="danger">
-                                    Error
-                                </Title>
-                                <Title level={3} type="secondary">
-                                    &
-                                </Title>
-                                <Title level={3} type="warning">
-                                    Warning
-                                </Title>
-                                <Tag color={ErrorCount ? 'error' : 'warning'}>{ProblematicEslintResults.length}</Tag>
-                            </>
-                        }
+                        title="Error & Warning"
                         extra={
-                            <>
+                            <Space>
+                                <Badge color={ErrorCount ? '#ff4d4f' : '#faad14'} count={ProblematicEslintResults.length} />
                                 <Dropdown
                                     menu={{
                                         items: SortModeEnum,
@@ -239,7 +216,6 @@ const App = () => {
                                                 const files = showEslintResults.filter(v => v.errorCount);
                                                 handleCopyText(map(files, 'filePath').join(' '), message);
                                             }}
-                                            style={{ marginLeft: 10 }}
                                         />
                                     </Tooltip>
                                 )}
@@ -251,88 +227,72 @@ const App = () => {
                                             setActiveKeys(openAll ? [] : map(showEslintResults, 'filePath'));
                                             setOpenAll(!openAll);
                                         }}
-                                        style={{ marginLeft: 10 }}
                                     />
                                 </Tooltip>
-                            </>
+                            </Space>
                         }
+                        hoverable
                         bodyStyle={{ padding: 0 }}
                     >
                         {!!AllFilesCount && (
-                            <Collapse
-                                activeKey={activeKeys}
-                                onChange={keys => {
-                                    setActiveKeys(keys);
-                                }}
-                                bordered={false}
-                            >
-                                {showEslintResults.map(v => {
-                                    const { filePath, messages, errorCount, warningCount } = v;
-                                    const extra = (
-                                        <>
-                                            <Tag color="error">{errorCount}</Tag>
-                                            <Tag color="warning">{warningCount}</Tag>
-                                        </>
-                                    );
-                                    const showMessages = messages.filter(v2 => {
-                                        return selectedRowKeys.includes(v2.ruleId);
-                                    });
-                                    return (
-                                        <Panel
-                                            header={
-                                                <Text copyable type={errorCount ? 'danger' : 'warning'}>
-                                                    {filePath}
-                                                </Text>
-                                            }
-                                            extra={extra}
-                                            key={filePath}
-                                        >
+                            <Table
+                                rowKey="filePath"
+                                columns={TableColumns}
+                                dataSource={showEslintResults}
+                                pagination={false}
+                                showHeader={false}
+                                style={{ marginTop: 1 }}
+                                expandable={{
+                                    columnWidth: 32,
+                                    expandRowByClick: true,
+                                    defaultExpandAllRows: true,
+                                    expandedRowKeys: activeKeys,
+                                    rowExpandable: record => {
+                                        return record.errorCount + record.warningCount;
+                                    },
+                                    expandedRowRender(record) {
+                                        const { messages } = record;
+                                        const showMessages = messages.filter(v => {
+                                            return selectedRowKeys.includes(v.ruleId);
+                                        });
+                                        return (
                                             <Table
                                                 rowKey={record => {
                                                     const { ruleId, line, column } = record;
                                                     return [ruleId, line, column].join();
                                                 }}
-                                                columns={getResultsColumns(v, messageApi)}
+                                                columns={getResultsColumns(record, messageApi)}
                                                 dataSource={showMessages}
                                                 showHeader={false}
                                                 pagination={false}
                                             />
-                                        </Panel>
-                                    );
-                                })}
-                            </Collapse>
+                                        );
+                                    },
+                                    onExpandedRowsChange(expandedRows) {
+                                        setActiveKeys(expandedRows);
+                                    }
+                                }}
+                            />
                         )}
                     </Card>
                 )}
 
                 {Boolean(SuccessFileCount) && (
-                    <Collapse defaultActiveKey={['a']} expandIconPosition="end">
-                        <Panel
-                            header={
-                                <>
-                                    <Title level={3} type="success">
-                                        No Bugs
-                                    </Title>
-                                    <Tag color="success">{SuccessFileCount}</Tag>
-                                </>
-                            }
-                            key="a"
-                        >
-                            <List
-                                dataSource={NoProblematicEslintResults}
-                                renderItem={item => {
-                                    const { filePath } = item;
-                                    return (
-                                        <List.Item style={{ padding: '8px 12px' }}>
-                                            <Text copyable type="success">
-                                                {filePath}
-                                            </Text>
-                                        </List.Item>
-                                    );
-                                }}
-                            />
-                        </Panel>
-                    </Collapse>
+                    <Card title="No Bugs" extra={<Badge color="#52c41a" count={SuccessFileCount} />} hoverable bodyStyle={{ padding: 0 }}>
+                        <List
+                            dataSource={NoProblematicEslintResults}
+                            renderItem={item => {
+                                const { filePath } = item;
+                                return (
+                                    <List.Item style={{ padding: '8px 12px' }}>
+                                        <Text copyable type="success">
+                                            {filePath}
+                                        </Text>
+                                    </List.Item>
+                                );
+                            }}
+                        />
+                    </Card>
                 )}
             </div>
             {messageContextHolder}

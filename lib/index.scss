@@ -11,13 +11,6 @@
 }
 
 body {
-    .ant-tag {
-        margin: 0;
-        user-select: none;
-        & + .ant-tag {
-            margin-left: 8px;
-        }
-    }
     .ant-table {
         pre {
             margin: 0;
@@ -25,26 +18,10 @@ body {
             white-space: pre-wrap;
             word-wrap: break-word;
         }
-    }
-    .ant-collapse {
-        .ant-collapse-header {
-            padding: 8px !important;
-        }
-        .ant-collapse-content-box {
-            padding: 0 !important;
-        }
-    }
-    .ant-card-head-title,
-    .ant-card-extra,
-    .ant-collapse-header-text,
-    .ant-collapse-extra,
-    .ant-list-footer {
-        & > * {
-            &.ant-typography {
-                display: inline;
-            }
-            &:not(:first-child) {
-                margin-left: 8px;
+        .ant-table-expanded-row {
+            .ant-table {
+                margin-block: 0 !important;
+                margin-inline: 0 !important;
             }
         }
     }

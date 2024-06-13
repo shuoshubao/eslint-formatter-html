@@ -1,5 +1,5 @@
 import { BugOutlined, EnvironmentOutlined, GithubOutlined, MailOutlined, UserOutlined } from '@ant-design/icons';
-import { Button, Divider, List, Space, Tooltip, Typography } from 'antd';
+import { Badge, Button, Divider, List, Space, Tooltip, Typography } from 'antd';
 import { filter, flatten, groupBy, intersection, map, sortBy, sum, uniq } from 'lodash';
 import React from 'react';
 import { author, bugs, homepage, name, version } from '../package.json';
@@ -165,6 +165,32 @@ export const handleCopyText = (text, message) => {
     );
 };
 
+export const TableColumns = [
+    {
+        render(value, record) {
+            const { filePath, errorCount } = record;
+            return (
+                <Text copyable type={errorCount ? 'danger' : 'warning'}>
+                    {filePath}
+                </Text>
+            );
+        }
+    },
+    {
+        width: 100,
+        align: 'right',
+        render(value, record) {
+            const { errorCount, warningCount } = record;
+            return (
+                <Space size={4}>
+                    {!!errorCount && <Badge color="#ff4d4f" count={errorCount} />}
+                    {!!warningCount && <Badge color="#faad14" count={warningCount} />}
+                </Space>
+            );
+        }
+    }
+];
+
 export const getResultsColumns = (row, message) => {
     const { filePath } = row;
     return [
@@ -175,22 +201,21 @@ export const getResultsColumns = (row, message) => {
                 const codePositionText = [line, column].join(':');
                 return (
                     <Tooltip title="Copy">
-                        <Button
-                            type="text"
+                        <Text
                             onClick={() => {
                                 const text = [filePath, line, column].join(':');
                                 handleCopyText(text, message);
                             }}
                         >
                             {codePositionText}
-                        </Button>
+                        </Text>
                     </Tooltip>
                 );
             }
         },
         {
             dataIndex: 'severity',
-            width: 80,
+            width: 75,
             render: renderSeverity
         },
         {
