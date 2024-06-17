@@ -17,7 +17,6 @@ import {
     message,
     theme
 } from 'antd';
-import 'antd/dist/reset.css';
 import dayjs from 'dayjs';
 import { find, first, last, map } from 'lodash';
 import React, { useEffect, useState } from 'react';
@@ -28,6 +27,7 @@ import {
     FatalErrorEslintResults,
     NoProblematicEslintResults,
     ProblematicEslintResults,
+    RulesColumns,
     SortModeEnum,
     TableColumns,
     addListenerPrefersColorScheme,
@@ -35,7 +35,6 @@ import {
     getEslintResults,
     getRankMessages,
     getResultsColumns,
-    getRulesColumns,
     handleCopyText,
     hasNoError,
     isDark,
@@ -81,7 +80,7 @@ const App = () => {
     const { ErrorAndWarningCount, FixableCount, ErrorCount, WarningCount, FilesCount, SuccessFileCount } = getEslintAnalysis();
 
     const onRankMessagesTableChange = (pagination, filters) => {
-        const { severity } = filters;
+        const { ruleId: severity } = filters;
         const RankMessages = getRankMessages(severity);
         setDataSourceRankMessages(RankMessages);
         setSelectedRowKeys(map(RankMessages, 'ruleId'));
@@ -104,7 +103,7 @@ const App = () => {
         >
             <div style={{ padding: 12, background: dark ? '#000' : '#fff' }}>
                 {FatalErrorEslintResults.length !== 0 && (
-                    <Card title="FatalError" extra={<Badge color="#ff4d4f" count={FatalErrorEslintResults.length} />} hoverable>
+                    <Card title="FatalErrors" extra={<Badge color="#ff4d4f" count={FatalErrorEslintResults.length} />} hoverable>
                         <List
                             rowKey="filePath"
                             dataSource={FatalErrorEslintResults}
@@ -134,7 +133,7 @@ const App = () => {
                 <Card
                     title="ESLint Report"
                     extra={
-                        <>
+                        <Space>
                             <Button>{last(EslintCwd.split('/'))}</Button>
                             <Button>{dayjs(EslintCreateTime).format('YYYY-MM-DD HH:mm:ss')}</Button>
                             <Button
@@ -143,7 +142,7 @@ const App = () => {
                                 }}
                                 icon={<CodeOutlined />}
                             />
-                        </>
+                        </Space>
                     }
                     hoverable
                 >
@@ -166,7 +165,7 @@ const App = () => {
                                 title="Files"
                                 formatter={() => {
                                     return (
-                                        <Space size={2}>
+                                        <Space size={4}>
                                             <span>{FilesCount}</span>
                                             <Badge color="#ff4d4f" count={FilesCount - SuccessFileCount} />
                                             <Badge color="#52c41a" count={SuccessFileCount} />
@@ -180,7 +179,7 @@ const App = () => {
                         <Table
                             rowKey="ruleId"
                             rowSelection={rowSelection}
-                            columns={getRulesColumns()}
+                            columns={RulesColumns}
                             dataSource={dataSourceRankMessages}
                             onChange={onRankMessagesTableChange}
                             pagination={false}
@@ -192,9 +191,9 @@ const App = () => {
                     <FloatButton.BackTop icon={<VerticalAlignTopOutlined />} />
                 </Card>
 
-                {ProblematicEslintResults.length !== 0 && (
+                {showEslintResults.length !== 0 && (
                     <Card
-                        title="Error & Warning"
+                        title="Errors & Warnings"
                         extra={
                             <Space>
                                 <Badge color={ErrorCount ? '#ff4d4f' : '#faad14'} count={ProblematicEslintResults.length} />
@@ -234,46 +233,44 @@ const App = () => {
                         hoverable
                         bodyStyle={{ padding: 0 }}
                     >
-                        {!!AllFilesCount && (
-                            <Table
-                                rowKey="filePath"
-                                columns={TableColumns}
-                                dataSource={showEslintResults}
-                                pagination={false}
-                                showHeader={false}
-                                style={{ marginTop: 1 }}
-                                expandable={{
-                                    columnWidth: 32,
-                                    expandRowByClick: true,
-                                    defaultExpandAllRows: true,
-                                    expandedRowKeys: activeKeys,
-                                    rowExpandable: record => {
-                                        return record.errorCount + record.warningCount;
-                                    },
-                                    expandedRowRender(record) {
-                                        const { messages } = record;
-                                        const showMessages = messages.filter(v => {
-                                            return selectedRowKeys.includes(v.ruleId);
-                                        });
-                                        return (
-                                            <Table
-                                                rowKey={record => {
-                                                    const { ruleId, line, column } = record;
-                                                    return [ruleId, line, column].join();
-                                                }}
-                                                columns={getResultsColumns(record, messageApi)}
-                                                dataSource={showMessages}
-                                                showHeader={false}
-                                                pagination={false}
-                                            />
-                                        );
-                                    },
-                                    onExpandedRowsChange(expandedRows) {
-                                        setActiveKeys(expandedRows);
-                                    }
-                                }}
-                            />
-                        )}
+                        <Table
+                            rowKey="filePath"
+                            columns={TableColumns}
+                            dataSource={showEslintResults}
+                            pagination={false}
+                            showHeader={false}
+                            style={{ marginTop: 1 }}
+                            expandable={{
+                                columnWidth: 32,
+                                expandRowByClick: true,
+                                defaultExpandAllRows: true,
+                                expandedRowKeys: activeKeys,
+                                rowExpandable: record => {
+                                    return record.errorCount + record.warningCount;
+                                },
+                                expandedRowRender(record) {
+                                    const { messages } = record;
+                                    const showMessages = messages.filter(v => {
+                                        return selectedRowKeys.includes(v.ruleId);
+                                    });
+                                    return (
+                                        <Table
+                                            rowKey={record => {
+                                                const { ruleId, line, column } = record;
+                                                return [ruleId, line, column].join();
+                                            }}
+                                            columns={getResultsColumns(record, messageApi)}
+                                            dataSource={showMessages}
+                                            showHeader={false}
+                                            pagination={false}
+                                        />
+                                    );
+                                },
+                                onExpandedRowsChange(expandedRows) {
+                                    setActiveKeys(expandedRows);
+                                }
+                            }}
+                        />
                     </Card>
                 )}
 
@@ -284,7 +281,7 @@ const App = () => {
                             renderItem={item => {
                                 const { filePath } = item;
                                 return (
-                                    <List.Item style={{ padding: '8px 12px' }}>
+                                    <List.Item>
                                         <Text copyable type="success">
                                             {filePath}
                                         </Text>

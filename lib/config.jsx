@@ -72,60 +72,48 @@ export const getEslintAnalysis = () => {
     };
 };
 
-export const SeverityEnum = [
+const SeverityEnum = [
     { value: 2, text: <Text type="danger">error</Text> },
     { value: 1, text: <Text type="warning">warning</Text> }
 ];
 
-const renderSeverity = value => {
-    const isErr = value === 2;
-    return <Text type={isErr ? 'danger' : 'warning'}>{isErr ? 'error' : 'warning'}</Text>;
-};
-
-export const getRulesColumns = () => {
-    return [
-        {
-            title: 'Count',
-            dataIndex: 'count',
-            width: 60
-        },
-        {
-            title: 'Files',
-            dataIndex: 'filesCount',
-            width: 55
-        },
-        {
-            title: 'Severity',
-            dataIndex: 'severity',
-            width: 90,
-            render: renderSeverity,
-            filters: SeverityEnum
-        },
-        {
-            title: 'RuleId',
-            dataIndex: 'ruleId',
-            width: 300,
-            render: (value, record) => {
-                const { url, fixable } = record;
-                const nodes = [
-                    <Link href={url} copyable>
-                        {value}
-                    </Link>
-                ];
-                if (fixable) {
-                    nodes.push(<span style={{ marginLeft: 4 }}>🔧</span>);
-                }
-                return nodes;
+export const RulesColumns = [
+    {
+        title: 'Count',
+        dataIndex: 'count',
+        width: 60
+    },
+    {
+        title: 'Files',
+        dataIndex: 'filesCount',
+        width: 55
+    },
+    {
+        title: 'RuleId',
+        dataIndex: 'ruleId',
+        width: 300,
+        filters: SeverityEnum,
+        render: (value, record) => {
+            const { severity, url, fixable } = record;
+            const isError = severity === 2;
+            const nodes = [
+                <Link href={url} type={isError ? 'danger' : 'warning'} copyable>
+                    {value}
+                </Link>
+            ];
+            if (fixable) {
+                nodes.push(<span style={{ marginLeft: 4 }}>🔧</span>);
             }
-        },
-        {
-            title: 'Description',
-            dataIndex: 'description'
+            return nodes;
         }
-    ];
-};
+    },
+    {
+        title: 'Description',
+        dataIndex: 'description'
+    }
+];
 
-const AllRuleIds = uniq(flatten(map(RankMessages, 'ruleId'))).filter(Boolean);
+const AllRuleIds = uniq(map(RankMessages, 'ruleId')).filter(Boolean);
 
 export const getRankMessages = severitys => {
     const messages = AllRuleIds.map(ruleId => {
@@ -214,20 +202,16 @@ export const getResultsColumns = (row, message) => {
             }
         },
         {
-            dataIndex: 'severity',
-            width: 75,
-            render: renderSeverity
-        },
-        {
-            dataIndex: 'ruleId',
             width: 300,
-            render: value => {
+            render: (value, record) => {
+                const { ruleId, severity } = record;
+                const isError = severity === 2;
                 const {
                     docs: { url }
-                } = EslintRulesMeta[value];
+                } = EslintRulesMeta[ruleId];
                 return (
-                    <Link href={url} copyable>
-                        {value}
+                    <Link href={url} type={isError ? 'danger' : 'warning'} copyable>
+                        {ruleId}
                     </Link>
                 );
             }
