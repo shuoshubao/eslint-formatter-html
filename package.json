@@ -28,6 +28,7 @@
     "scripts": {
         "start": "vite",
         "build": "vite build",
+        "deploy": "npm run build && node docs/deploy",
         "prepublishOnly": "npm run build"
     },
     "dependencies": {
