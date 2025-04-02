@@ -36,12 +36,12 @@
         "strip-ansi": "^5.2.0"
     },
     "devDependencies": {
-        "@vitejs/plugin-react": "^4.3.0",
+        "@vitejs/plugin-react": "^4.3.4",
         "antd": "5.18.0",
-        "react": "^18.2.0",
-        "react-dom": "^18.2.0",
+        "react": "18.2.0",
+        "react-dom": "18.2.0",
         "sass": "^1.77.4",
-        "vite": "^5.2.12",
+        "vite": "^6.2.4",
         "vite-plugin-externals": "^0.6.2"
     }
 }
