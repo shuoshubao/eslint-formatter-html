@@ -5,14 +5,14 @@ A enhanced ESLint formatter
 # Examples
 
 -   https://shuoshubao.github.io/eslint-formatter-html
--   https://shuoshubao.github.io/eslint-formatter-html/demo1
--   https://shuoshubao.github.io/eslint-formatter-html/demo2
--   https://shuoshubao.github.io/eslint-formatter-html/demo3
--   https://shuoshubao.github.io/eslint-formatter-html/demo4
--   https://shuoshubao.github.io/eslint-formatter-html/demo5
--   https://shuoshubao.github.io/eslint-formatter-html/demo6
--   https://shuoshubao.github.io/eslint-formatter-html/demo7
--   https://shuoshubao.github.io/eslint-formatter-html/demo8
+-   [demo1](https://shuoshubao.github.io/eslint-formatter-html/demo1)
+-   [demo2](https://shuoshubao.github.io/eslint-formatter-html/demo2)
+-   [demo3](https://shuoshubao.github.io/eslint-formatter-html/demo3)
+-   [demo4](https://shuoshubao.github.io/eslint-formatter-html/demo4)
+-   [demo5](https://shuoshubao.github.io/eslint-formatter-html/demo5)
+-   [demo6](https://shuoshubao.github.io/eslint-formatter-html/demo6)
+-   [demo7](https://shuoshubao.github.io/eslint-formatter-html/demo7)
+-   [demo8](https://shuoshubao.github.io/eslint-formatter-html/demo8)
 
 ## ESLint official example
 
