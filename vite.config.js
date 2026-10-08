@@ -8,6 +8,8 @@ export default ({ mode }) => {
         base: isDevelopment ? '/' : `https://unpkg.com/${name}@${version}/dist/`,
         build: {
             assetsDir: '.',
+            target: 'esnext',
+            modulePreload: { polyfill: false },
             rollupOptions: {
                 output: {
                     entryFileNames: `[name].js`,

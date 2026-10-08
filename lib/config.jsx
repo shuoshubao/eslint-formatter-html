@@ -15,13 +15,19 @@ const copyText = (text = '') => {
     document.body.removeChild(textarea);
 };
 
-const inflateData = str => {
-    const { inflateRaw } = window.pako;
-    return JSON.parse(inflateRaw(new Uint8Array(str.split(',')), { to: 'string' }));
+// 数据为 gzip + base64 的字符串, 用浏览器原生 DecompressionStream 解压
+// 开发时 docs/EslintResults.js 直接提供明文对象, 原样返回
+const inflateData = async data => {
+    if (typeof data !== 'string') {
+        return data;
+    }
+    const bytes = Uint8Array.from(atob(data), v => v.charCodeAt(0));
+    const stream = new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip'));
+    return JSON.parse(await new Response(stream).text());
 };
 
-window.EslintResults = inflateData(window.EslintResults);
-window.EslintRulesMeta = inflateData(window.EslintRulesMeta);
+window.EslintResults = await inflateData(window.EslintResults);
+window.EslintRulesMeta = await inflateData(window.EslintRulesMeta);
 
 const { EslintResults, EslintRulesMeta, EslintCwd = name, EslintCreateTime = Date.now() } = window;
 

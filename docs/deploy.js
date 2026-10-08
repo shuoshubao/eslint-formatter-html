@@ -6,7 +6,12 @@
  * @Description: 生成demo页面
  */
 const { readFileSync, writeFileSync } = require('fs');
+const { gzipSync } = require('zlib');
 const DemoData = require('./data');
+
+const serializeData = data => {
+    return gzipSync(JSON.stringify(data), { level: 9 }).toString('base64');
+};
 
 const template = readFileSync('./dist/index.html', 'utf-8');
 
@@ -20,8 +25,8 @@ DemoData.forEach((v, i) => {
         <script>
             window.EslintCwd = '${EslintCwd}';
             window.EslintCreateTime = ${EslintCreateTime};
-            window.EslintResults = '${EslintResults}';
-            window.EslintRulesMeta = '${EslintRulesMeta}';
+            window.EslintResults = '${serializeData(EslintResults)}';
+            window.EslintRulesMeta = '${serializeData(EslintRulesMeta)}';
         </script>
     `;
 

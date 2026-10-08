@@ -1,7 +1,8 @@
 const { readFileSync } = require('fs');
 const { relative, resolve } = require('path');
-const { deflateRaw } = require('pako');
-const stripAnsi = require('strip-ansi');
+const { gzipSync } = require('zlib');
+// strip-ansi 7+ 是 ESM only, 通过 require(esm) 加载后取 default
+const stripAnsi = require('strip-ansi').default;
 
 const formatEslintData = (results, context) => {
     const { cwd, rulesMeta } = context;
@@ -33,8 +34,9 @@ const getFileContent = fileName => {
     return readFileSync(resolve(__dirname, fileName), 'utf-8');
 };
 
-const deflateData = data => {
-    return deflateRaw(JSON.stringify(data).toString());
+// gzip + base64, 浏览器端用 DecompressionStream 解压
+const serializeData = data => {
+    return gzipSync(JSON.stringify(data), { level: 9 }).toString('base64');
 };
 
 module.exports = (results, context) => {
@@ -53,8 +55,8 @@ module.exports = (results, context) => {
         <script>
             window.EslintCwd = '${EslintCwd}';
             window.EslintCreateTime = ${EslintCreateTime};
-            window.EslintResults = '${deflateData(EslintResults)}';
-            window.EslintRulesMeta = '${deflateData(EslintRulesMeta)}';
+            window.EslintResults = '${serializeData(EslintResults)}';
+            window.EslintRulesMeta = '${serializeData(EslintRulesMeta)}';
         </script>
     `;
 

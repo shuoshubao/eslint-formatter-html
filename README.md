@@ -4,20 +4,20 @@ A enhanced ESLint formatter
 
 # Examples
 
--   https://shuoshubao.github.io/eslint-formatter-html
--   [demo1](https://shuoshubao.github.io/eslint-formatter-html/demo1)
--   [demo2](https://shuoshubao.github.io/eslint-formatter-html/demo2)
--   [demo3](https://shuoshubao.github.io/eslint-formatter-html/demo3)
--   [demo4](https://shuoshubao.github.io/eslint-formatter-html/demo4)
--   [demo5](https://shuoshubao.github.io/eslint-formatter-html/demo5)
--   [demo6](https://shuoshubao.github.io/eslint-formatter-html/demo6)
--   [demo7](https://shuoshubao.github.io/eslint-formatter-html/demo7)
--   [demo8](https://shuoshubao.github.io/eslint-formatter-html/demo8)
+- https://shuoshubao.github.io/eslint-formatter-html
+- [demo1](https://shuoshubao.github.io/eslint-formatter-html/demo1)
+- [demo2](https://shuoshubao.github.io/eslint-formatter-html/demo2)
+- [demo3](https://shuoshubao.github.io/eslint-formatter-html/demo3)
+- [demo4](https://shuoshubao.github.io/eslint-formatter-html/demo4)
+- [demo5](https://shuoshubao.github.io/eslint-formatter-html/demo5)
+- [demo6](https://shuoshubao.github.io/eslint-formatter-html/demo6)
+- [demo7](https://shuoshubao.github.io/eslint-formatter-html/demo7)
+- [demo8](https://shuoshubao.github.io/eslint-formatter-html/demo8)
 
 ## ESLint official example
 
--   https://eslint.org/docs/latest/user-guide/formatters/html-formatter-example
--   https://shuoshubao.github.io/eslint-formatter-html/built-in
+- https://eslint.org/docs/latest/user-guide/formatters/html-formatter-example
+- https://shuoshubao.github.io/eslint-formatter-html/built-in
 
 # Install
 
@@ -35,9 +35,9 @@ npx eslint -f html -o ESLintReport.html
 
 # Features
 
--   The html page is built based on `react` and `antd`, and the interaction is very good
--   The file path is a relative path, very short
--   Both file paths and code lines and columns can be copied, that you can quickly locate the specific location of the code
--   Supports `ansi` code display
--   Supports dark mode, depending on your Mac settings
--   Using [pako](https://www.npmjs.com/package/pako) compression, even if the project is large, the report file size is small
+- The html page is built based on `react` and `antd`, and the interaction is very good
+- The file path is a relative path, very short
+- Both file paths and code lines and columns can be copied, that you can quickly locate the specific location of the code
+- Supports `ansi` code display
+- Supports dark mode, depending on your Mac settings
+- The report data is compressed with gzip (`zlib` on the Node side, native `DecompressionStream` in the browser), even if the project is large, the report file size is small
