@@ -212,7 +212,7 @@ const App = () => {
                                         <Button
                                             icon={<CopyOutlined />}
                                             onClick={() => {
-                                                const files = showEslintResults.filter(v => v.errorCount);
+                                                const files = showEslintResults.filter(item => item.errorCount);
                                                 handleCopyText(map(files, 'filePath').join(' '), message);
                                             }}
                                         />
@@ -250,8 +250,8 @@ const App = () => {
                                 },
                                 expandedRowRender(record) {
                                     const { messages } = record;
-                                    const showMessages = messages.filter(v => {
-                                        return selectedRowKeys.includes(v.ruleId);
+                                    const showMessages = messages.filter(item => {
+                                        return selectedRowKeys.includes(item.ruleId);
                                     });
                                     return (
                                         <Table

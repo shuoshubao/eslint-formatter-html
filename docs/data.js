@@ -5,7 +5,7 @@
  * @LastEditTime: 2026-10-08 20:16:13
  * @Description: demo 数据
  */
-module.exports = [
+export default [
     {
         EslintCwd: '/Users/shuoshubao/Documents/Github/Magpie',
         EslintCreateTime: 1670223841668,

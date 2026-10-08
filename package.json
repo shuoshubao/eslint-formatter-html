@@ -19,6 +19,7 @@
     },
     "homepage": "https://github.com/shuoshubao/eslint-formatter-html#readme",
     "license": "MIT",
+    "type": "module",
     "keywords": [
         "eslint",
         "formatter",
@@ -28,7 +29,7 @@
     "scripts": {
         "start": "vite",
         "build": "vite build",
-        "deploy": "npm run build && node docs/deploy",
+        "deploy": "npm run build && node docs/deploy.js",
         "prepublishOnly": "npm run build"
     },
     "dependencies": {

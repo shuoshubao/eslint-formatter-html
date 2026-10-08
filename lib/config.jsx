@@ -15,13 +15,11 @@ const copyText = (text = '') => {
     document.body.removeChild(textarea);
 };
 
-// 数据为 gzip + base64 的字符串, 用浏览器原生 DecompressionStream 解压
-// 开发时 docs/EslintResults.js 直接提供明文对象, 原样返回
 const inflateData = async data => {
     if (typeof data !== 'string') {
         return data;
     }
-    const bytes = Uint8Array.from(atob(data), v => v.charCodeAt(0));
+    const bytes = Uint8Array.from(atob(data), item => item.charCodeAt(0));
     const stream = new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip'));
     return JSON.parse(await new Response(stream).text());
 };
@@ -33,34 +31,34 @@ const { EslintResults, EslintRulesMeta, EslintCwd = name, EslintCreateTime = Dat
 
 export { EslintCreateTime, EslintCwd };
 
-export const FatalErrorEslintResults = EslintResults.filter(v => v.fatalErrorCount);
+export const FatalErrorEslintResults = EslintResults.filter(item => item.fatalErrorCount);
 
-export const ProblematicEslintResults = EslintResults.filter(v => {
-    return v.messages.length && v.fatalErrorCount === 0;
+export const ProblematicEslintResults = EslintResults.filter(item => {
+    return item.messages.length && item.fatalErrorCount === 0;
 });
 
-export const NoProblematicEslintResults = EslintResults.filter(v => v.messages.length === 0);
+export const NoProblematicEslintResults = EslintResults.filter(item => item.messages.length === 0);
 
-const RankMessages = flatten(ProblematicEslintResults.map(v => v.messages));
+const RankMessages = flatten(ProblematicEslintResults.map(item => item.messages));
 
-export const hasNoError = !RankMessages.some(v => v.severity === 2) && FatalErrorEslintResults.length === 0;
+export const hasNoError = !RankMessages.some(item => item.severity === 2) && FatalErrorEslintResults.length === 0;
 
 export const getEslintAnalysis = () => {
     const ErrorCount = sum(
-        ProblematicEslintResults.map(v => {
-            return v.errorCount;
+        ProblematicEslintResults.map(item => {
+            return item.errorCount;
         })
     );
 
     const WarningCount = sum(
-        ProblematicEslintResults.map(v => {
-            return v.warningCount;
+        ProblematicEslintResults.map(item => {
+            return item.warningCount;
         })
     );
 
     const FixableCount = sum(
-        ProblematicEslintResults.map(v => {
-            return v.fixableErrorCount + v.fixableWarningCount;
+        ProblematicEslintResults.map(item => {
+            return item.fixableErrorCount + item.fixableWarningCount;
         })
     );
 
@@ -130,8 +128,8 @@ export const getRankMessages = severitys => {
             fixable
         } = EslintRulesMeta[ruleId];
         const { length: count } = sameList;
-        const { length: filesCount } = ProblematicEslintResults.filter(v => {
-            return map(v.messages, 'ruleId').includes(ruleId);
+        const { length: filesCount } = ProblematicEslintResults.filter(item => {
+            return map(item.messages, 'ruleId').includes(ruleId);
         });
         return {
             ruleId,
@@ -142,8 +140,8 @@ export const getRankMessages = severitys => {
             count,
             filesCount
         };
-    }).filter(v => {
-        return (severitys || map(SeverityEnum, 'value')).includes(v.severity);
+    }).filter(item => {
+        return (severitys || map(SeverityEnum, 'value')).includes(item.severity);
     });
     const temp = groupBy(messages, 'severity');
     return flatten([sortBy(temp['2'], ['count']).reverse(), sortBy(temp['1'], ['count']).reverse()]);
@@ -243,8 +241,8 @@ export const getEslintResults = ({ sortMode, selectedRowKeys }) => {
     } else {
         list.push(...ProblematicEslintResults);
     }
-    return list.filter(v => {
-        return intersection(selectedRowKeys, map(v.messages, 'ruleId')).length;
+    return list.filter(item => {
+        return intersection(selectedRowKeys, map(item.messages, 'ruleId')).length;
     });
 };
 
@@ -303,7 +301,7 @@ export const showPkgInfo = (Modal, message) => {
                     <Link href="https://prettier.io">Prettier</Link>
                 </Space>
             }
-            dataSource={infoList.filter(v => v.children)}
+            dataSource={infoList.filter(item => item.children)}
             renderItem={item => {
                 const { href, children } = item;
                 if (!href) {

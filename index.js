@@ -1,45 +1,46 @@
-const { readFileSync } = require('fs');
-const { relative, resolve } = require('path');
-const { gzipSync } = require('zlib');
-// strip-ansi 7+ 是 ESM only, 通过 require(esm) 加载后取 default
-const stripAnsi = require('strip-ansi').default;
+import { readFileSync } from 'fs';
+import { createRequire } from 'module';
+import { relative, resolve } from 'path';
+import { gzipSync } from 'zlib';
+import stripAnsi from 'strip-ansi';
+
+const require = createRequire(import.meta.url);
 
 const formatEslintData = (results, context) => {
     const { cwd, rulesMeta } = context;
     const EslintRulesMeta = {};
-    results.forEach(v => {
-        const { filePath } = v;
-        v.filePath = relative(cwd, filePath);
-        v.messages = v.messages.map(v2 => {
-            const { ruleId, message } = v2;
+    results.forEach(item => {
+        const { filePath } = item;
+        item.filePath = relative(cwd, filePath);
+        item.messages = item.messages.map(item2 => {
+            const { ruleId, message } = item2;
             if (ruleId && !(ruleId in EslintRulesMeta)) {
                 EslintRulesMeta[ruleId] = rulesMeta[ruleId];
                 delete EslintRulesMeta[ruleId].schema;
             }
             return {
-                ...v2,
+                ...item2,
                 message: stripAnsi(message)
             };
         });
-        delete v.source;
-        delete v.output;
-        delete v.usedDeprecatedRules;
-        delete v.suppressedMessages;
+        delete item.source;
+        delete item.output;
+        delete item.usedDeprecatedRules;
+        delete item.suppressedMessages;
     });
 
     return { EslintResults: results, EslintRulesMeta };
 };
 
 const getFileContent = fileName => {
-    return readFileSync(resolve(__dirname, fileName), 'utf-8');
+    return readFileSync(resolve(import.meta.dirname, fileName), 'utf-8');
 };
 
-// gzip + base64, 浏览器端用 DecompressionStream 解压
 const serializeData = data => {
     return gzipSync(JSON.stringify(data), { level: 9 }).toString('base64');
 };
 
-module.exports = (results, context) => {
+export default (results, context) => {
     try {
         const tableFormatter = require('eslint-formatter-table');
         console.log(tableFormatter(results, context));
