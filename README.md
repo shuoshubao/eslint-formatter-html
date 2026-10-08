@@ -1,4 +1,4 @@
-# eslint-formatter-html
+# eslint-formatter-react
 
 A enhanced ESLint formatter
 
@@ -22,13 +22,13 @@ A enhanced ESLint formatter
 # Install
 
 ```sh
-npm i -D eslint-formatter-html
+npm i -D eslint-formatter-react
 ```
 
 # Usage
 
 ```sh
-npx eslint -f html -o ESLintReport.html
+npx eslint -f react -o ESLintReport.html
 ```
 
 > More information about formatters can be found on https://eslint.org/docs/latest/user-guide/formatters

@@ -1,6 +1,6 @@
 {
-    "name": "eslint-formatter-html",
-    "version": "2.7.3",
+    "name": "eslint-formatter-react",
+    "version": "1.2.0",
     "description": "eslint-formatter-html",
     "files": [
         "dist",
